@@ -4,23 +4,23 @@
   author_verified = item.responds_to?(:author_verified) && item.author_verified
 -%>
 
-<div class="pure-u-1 pure-u-md-1-4">
-    <div class="h-box">
+<div>
+    <div>
         <% case item when %>
         <% when SearchChannel %>
             <% if !thin_mode %>
                 <a tabindex="-1" href="/channel/<%= item.ucid %>">
                     <center>
-                        <img loading="lazy" style="width:56.25%" src="/ggpht<%= URI.parse(item.author_thumbnail).request_target.gsub(/=s\d+/, "=s176") %>" alt="" />
+                        <img loading="lazy" src="/ggpht<%= URI.parse(item.author_thumbnail).request_target.gsub(/=s\d+/, "=s176") %>" alt="" />
                     </center>
                 </a>
             <%- else -%>
-                <div class="thumbnail-placeholder" style="width:56.25%"></div>
+                <div></div>
             <% end %>
 
-            <div class="video-card-row flexible">
-                <div class="flex-left"><a href="/channel/<%= item.ucid %>">
-                    <p class="channel-name" dir="auto"><%= HTML.escape(item.author) %>
+            <div>
+                <div><a href="/channel/<%= item.ucid %>">
+                    <p dir="auto"><%= HTML.escape(item.author) %>
                         <%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
                     </p>
                 </a></div>
@@ -33,27 +33,21 @@
         <% when SearchHashtag %>
             <% if !thin_mode %>
                 <a tabindex="-1" href="<%= item.url %>">
-                    <center><img style="width:56.25%" src="/hashtag.svg" alt="" /></center>
+                    <center><img src="/hashtag.svg" alt="" /></center>
                 </a>
             <%- else -%>
-                <div class="thumbnail-placeholder" style="width:56.25%"></div>
+                <div></div>
             <% end %>
 
-            <div class="video-card-row">
-                <div class="flex-left"><a href="<%= item.url %>"><%= HTML.escape(item.title) %></a></div>
-            </div>
+                <div><a href="<%= item.url %>"><%= HTML.escape(item.title) %></a></div>
 
-            <div class="video-card-row">
                 <%- if item.video_count != 0 -%>
-                    <p><%= translate_count(locale, "generic_videos_count", item.video_count, NumberFormatting::Separator) %></p>
+                    <div><%= translate_count(locale, "generic_videos_count", item.video_count, NumberFormatting::Separator) %></div>
                 <%- end -%>
-            </div>
 
-            <div class="video-card-row">
                 <%- if item.channel_count != 0 -%>
-                    <p><%= translate_count(locale, "generic_channels_count", item.channel_count, NumberFormatting::Separator) %></p>
+                    <div><%= translate_count(locale, "generic_channels_count", item.channel_count, NumberFormatting::Separator) %></div>
                 <%- end -%>
-            </div>
         <% when SearchPlaylist, InvidiousPlaylist %>
             <%-
               if item.id.starts_with? "RD"
@@ -69,33 +63,30 @@
                         <img loading="lazy" class="thumbnail" src="<%= URI.parse(item.thumbnail || "/").request_target %>" alt="" />
                     </a>
                 <%- else -%>
-                    <div class="thumbnail-placeholder"></div>
                 <%- end -%>
-
-                <div class="bottom-right-overlay">
-                    <p class="length"><%= translate_count(locale, "generic_videos_count", item.video_count, NumberFormatting::Separator) %></p>
-                </div>
             </div>
 
-            <div class="video-card-row">
+						<div class="video-length">
+							<%= translate_count(locale, "generic_videos_count", item.video_count, NumberFormatting::Separator) %>
+						</div>
+
+            <h3 class="video-title">
                 <a href="<%= link_url %>"><p dir="auto"><%= HTML.escape(item.title) %></p></a>
-            </div>
+            </h3>
 
-            <div class="video-card-row flexible">
-                <div class="flex-left">
-                    <% if !item.ucid.to_s.empty? %>
-                        <a href="/channel/<%= item.ucid %>">
-                            <p class="channel-name" dir="auto"><%= HTML.escape(item.author) %>
-                                <%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
-                            </p>
-                        </a>
-                    <% else %>
-                        <p class="channel-name" dir="auto"><%= HTML.escape(item.author) %>
-                            <%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
-                        </p>
-                    <% end %>
-                </div>
-            </div>
+									<% if !item.ucid.to_s.empty? %>
+										<h4 class="channel-name" dir="auto">
+											<a href="/channel/<%= item.ucid %>">
+													<%= HTML.escape(item.author) %>
+													<%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
+											</a>
+										</h4>
+									<% else %>
+											<h4 class="channel-name" dir="auto">
+												<%= HTML.escape(item.author) %>
+												<%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
+											</h4>
+									<% end %>
         <% when Category %>
         <% else %>
             <%-
@@ -126,11 +117,11 @@
                     <div class="thumbnail-placeholder"></div>
                 <%- end -%>
 
-                <div class="top-left-overlay">
+                <div>
                     <%- if env.get? "show_watched" -%>
                         <form data-onsubmit="return_false" action="/watch_ajax?action_mark_watched=1&id=<%= item.id %>&referer=<%= env.get("current_page") %>" method="post">
                             <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                            <button type="submit" class="pure-button pure-button-secondary low-profile"
+                            <button type="submit" 
                                     data-onclick="mark_watched" data-id="<%= item.id %>">
                                 <i data-mouse="switch_classes" data-switch-classes="ion-ios-eye-off,ion-ios-eye" class="icon ion-ios-eye"></i>
                             </button>
@@ -141,34 +132,32 @@
                         <%- form_parameters = "action_add_video=1&video_id=#{item.id}&playlist_id=#{plid_form}&referer=#{env.get("current_page")}" -%>
                         <form data-onsubmit="return_false" action="/playlist_ajax?<%= form_parameters %>" method="post">
                             <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                            <button type="submit" class="pure-button pure-button-secondary low-profile"
+                            <button type="submit" 
                                     data-onclick="add_playlist_item" data-id="<%= item.id %>" data-plid="<%= plid_form %>"><i class="icon ion-md-add"></i></button>
                         </form>
                     <%- elsif item.is_a?(PlaylistVideo) && (plid_form = env.get?("remove_playlist_items")) -%>
                         <%- form_parameters = "action_remove_video=1&set_video_id=#{item.index}&playlist_id=#{plid_form}&referer=#{env.get("current_page")}" -%>
                         <form data-onsubmit="return_false" action="/playlist_ajax?<%= form_parameters %>" method="post">
                             <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                            <button type="submit" class="pure-button pure-button-secondary low-profile"
+                            <button type="submit"
                                     data-onclick="remove_playlist_item" data-index="<%= item.index %>" data-plid="<%= plid_form %>"><i class="icon ion-md-trash"></i></button>
                         </form>
                     <%- end -%>
                 </div>
 
-                <div class="bottom-right-overlay">
                     <%- if item.responds_to?(:live_now) && item.live_now -%>
                         <p class="length" dir="auto"><i class="icon ion-ios-play-circle"></i>&nbsp;<%= translate(locale, "LIVE") %></p>
                     <%- elsif item.length_seconds != 0 -%>
                         <p class="length"><%= recode_length_seconds(item.length_seconds) %></p>
                     <%- end -%>
-                </div>
             </div>
 
-            <div class="video-card-row">
+            <div>
                 <a href="<%= link_url %>"><p dir="auto"><%= HTML.escape(item.title) %></p></a>
             </div>
 
-            <div class="video-card-row flexible">
-                <div class="flex-left">
+            <div>
+                <div>
                     <% if !item.ucid.to_s.empty? %>
                         <a href="/channel/<%= item.ucid %>">
                             <p class="channel-name" dir="auto"><%= HTML.escape(item.author) %>
@@ -185,8 +174,8 @@
                 <%= rendered "components/video-context-buttons" %>
             </div>
 
-            <div class="video-card-row flexible">
-                <div class="flex-left">
+            <div>
+                <div>
                     <% if item.responds_to?(:premiere_timestamp) && item.premiere_timestamp.try &.> Time.utc %>
                         <p class="video-data" dir="auto"><%= translate(locale, "Premieres in `x`", recode_date((item.premiere_timestamp.as(Time) - Time.utc).ago, locale)) %></p>
                     <% elsif item.responds_to?(:published) && (Time.utc - item.published) > 1.minute %>
@@ -195,8 +184,8 @@
                 </div>
 
                 <% if item.responds_to?(:views) && item.views %>
-                <div class="flex-right">
-                    <p class="video-data" dir="auto"><%= translate_count(locale, "generic_views_count", item.views || 0, NumberFormatting::Short) %></p>
+                <div>
+                    <p dir="auto"><%= translate_count(locale, "generic_views_count", item.views || 0, NumberFormatting::Short) %></p>
                 </div>
                 <% end %>
             </div>

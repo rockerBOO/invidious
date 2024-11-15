@@ -38,7 +38,7 @@ addEventListener('storage', function (e) {
 
 // Set theme from preferences on page load
 addEventListener('DOMContentLoaded', function () {
-    const prefTheme = document.getElementById('dark_mode_pref').textContent;
+		const prefTheme = document.body.dataset.darkPref;
     if (prefTheme) {
         setTheme(prefTheme);
         helpers.storage.set(STORAGE_KEY_THEME, prefTheme);

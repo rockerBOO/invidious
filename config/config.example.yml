@@ -52,7 +52,7 @@ db:
 ## Accepted values: a path to a UNIX socket or "<IP>:<Port>"
 ## Default: <none>
 ##
-#signature_server:
+signature_server: 127.0.0.1:12999
 
 
 #########################################
@@ -209,6 +209,8 @@ http_proxy:
 ##
 # po_token: ""
 # visitor_data: ""
+visitor_data: Cgt6TUd6cm05MUIzUSiIos65BjIKCgJVUxIEGgAgOg%3D%3D
+po_token: MnT2yhVBMT7EW_byRe2XBOMnKDS7Y0e3xrXeEm6Dzrt36gfGtDfo-h4NN7NDknZIJPwpiAlgJRZFQrk7QSxfNq0ZjHNMpRggUp6-nHhsn0cQUQtBeVOnFPE2rHchEYJowAPtUc2YvijsksaRaFkWq9g48Vy7iA==
 
 # -----------------------------
 #  Logging

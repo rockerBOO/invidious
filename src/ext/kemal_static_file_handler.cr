@@ -177,15 +177,15 @@ module Kemal
             return
           end
 
-          if @cached_files.sum(&.[1][:data].bytesize) + (size = File.size(file_path)) < CACHE_LIMIT
-            data = Bytes.new(size)
-            File.open(file_path, &.read(data))
-
-            @cached_files[file_path] = {data: data, filestat: file_info}
-            send_file(context, file_path, data, file_info)
-          else
-            send_file(context, file_path)
-          end
+          # if @cached_files.sum(&.[1][:data].bytesize) + (size = File.size(file_path)) < CACHE_LIMIT
+          #   data = Bytes.new(size)
+          #   File.open(file_path, &.read(data))
+          #
+          #   @cached_files[file_path] = {data: data, filestat: file_info}
+          #   send_file(context, file_path, data, file_info)
+          # else
+          send_file(context, file_path)
+          # end
         else # Not a normal file (FIFO/device/socket)
           call_next(context)
         end

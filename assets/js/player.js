@@ -421,10 +421,10 @@ if (!video_data.params.listen && video_data.params.quality === 'dash') {
     }
 }
 
-player.vttThumbnails({
-    src: '/api/v1/storyboards/' + video_data.id + '?height=90',
-    showTimestamp: true
-});
+// player.vttThumbnails({
+//     src: '/api/v1/storyboards/' + video_data.id + '?height=90',
+//     showTimestamp: true
+// });
 
 // Enable annotations
 if (!video_data.params.listen && video_data.params.annotations) {
@@ -726,7 +726,7 @@ addEventListener('keydown', function (e) {
 }());
 
 // Since videojs-share can sometimes be blocked, we defer it until last
-if (player.share) player.share(shareOptions);
+// if (player.share) player.share(shareOptions);
 
 // show the preferred caption by default
 if (player_data.preferred_caption_found) {

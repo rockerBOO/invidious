@@ -70,11 +70,11 @@ we're going to need to do it here in order to allow for translations.
 %>
 </script>
 
-<div id="player-container" class="h-box">
+<div id="player-container">
     <%= rendered "components/player" %>
 </div>
 
-<div class="h-box">
+<div>
     <h1>
         <%= title %>
         <% if params.listen %>
@@ -109,9 +109,9 @@ we're going to need to do it here in order to allow for translations.
     <% end %>
 </div>
 
-<div class="pure-g">
-    <div class="pure-u-1 pure-u-lg-1-5">
-        <div class="h-box">
+<div>
+    <div>
+        <div>
             <span id="watch-on-youtube">
                 <%-
                     link_yt_watch = URI.new(scheme: "https", host: "www.youtube.com", path: "/watch", query: "v=#{video.id}")
@@ -158,10 +158,10 @@ we're going to need to do it here in order to allow for translations.
             <% if user %>
                 <% playlists = Invidious::Database::Playlists.select_user_created_playlists(user.email) %>
                 <% if !playlists.empty? %>
-                    <form data-onsubmit="return_false" class="pure-form pure-form-stacked" action="/playlist_ajax" method="post" target="_blank">
-                        <div class="pure-control-group">
+                    <form data-onsubmit="return_false" action="/playlist_ajax" method="post" target="_blank">
+                        <div>
                             <label for="playlist_id"><%= translate(locale, "Add to playlist: ") %></label>
-                            <select style="width:100%" name="playlist_id" id="playlist_id">
+                            <select name="playlist_id" id="playlist_id">
                                 <% playlists.each do |plid, playlist_title| %>
                                     <option data-plid="<%= plid %>" value="<%= plid %>"><%= HTML.escape(playlist_title) %></option>
                                 <% end %>
@@ -171,7 +171,7 @@ we're going to need to do it here in order to allow for translations.
                         <input type="hidden" name="csrf_token" value="<%= URI.encode_www_form(env.get?("csrf_token").try &.as(String) || "") %>">
                         <input type="hidden" name="action_add_video" value="1">
                         <input type="hidden" name="video_id" value="<%= video.id %>">
-                        <button data-onclick="add_playlist_video" data-id="<%= video.id %>" type="submit" class="pure-button pure-button-primary">
+                        <button data-onclick="add_playlist_video" data-id="<%= video.id %>" type="submit">
                             <b><%= translate(locale, "Add to playlist") %></b>
                         </button>
                     </form>
@@ -221,10 +221,10 @@ we're going to need to do it here in order to allow for translations.
         </div>
     </div>
 
-    <div class="pure-u-1 <% if params.related_videos || plid %>pure-u-lg-3-5<% else %>pure-u-md-4-5<% end %>">
+    <div>
 
-        <div class="pure-g h-box flexible title">
-            <div class="pure-u-1-2 flex-left flexible">
+        <div>
+            <div>
                 <a href="/channel/<%= video.ucid %>">
                     <div class="channel-profile">
                         <% if !video.author_thumbnail.empty? %>
@@ -235,12 +235,10 @@ we're going to need to do it here in order to allow for translations.
                 </a>
             </div>
 
-            <div class="pure-u-1-2 flex-right flexible button-container">
-                <div class="pure-u">
-                    <% sub_count_text = video.sub_count_text %>
-                    <%= rendered "components/subscribe_widget" %>
-                </div>
-            </div>
+							<div>
+									<% sub_count_text = video.sub_count_text %>
+									<%= rendered "components/subscribe_widget" %>
+							</div>
         </div>
 
         <div class="h-box">
@@ -254,10 +252,10 @@ we're going to need to do it here in order to allow for translations.
 
             <div id="description-box"> <!-- Description -->
                 <% if video.description.size < 200 || params.extend_desc %>
-                    <div id="descriptionWrapper"><%= video.description_html %></div>
+                    <p class="description" id="descriptionWrapper"><%= video.description_html %></p>
                 <% else %>
                     <input id="descexpansionbutton" type="checkbox"/>
-                    <div id="descriptionWrapper"><%= video.description_html %></div>
+                    <p class="description" id="descriptionWrapper"><%= video.description_html %></p>
                     <label for="descexpansionbutton">
                         <a></a>
                     </label>
