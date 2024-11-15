@@ -221,9 +221,9 @@ error 500 do |env, ex|
   error_template(500, ex)
 end
 
-# static_headers do |response|
-#   response.headers.add("Cache-Control", "max-age=2629800")
-# end
+static_headers do |response|
+  response.headers.add("Cache-Control", "max-age=2629800")
+end
 
 # Init Kemal
 
