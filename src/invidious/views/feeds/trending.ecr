@@ -16,7 +16,7 @@
 				<%= translate(locale, "View as playlist") %>
 		</a>
 <% end %>
-<nav>
+<nav class="trending">
 	<ul>
 		<% {"Default", "Music", "Gaming", "Movies"}.each do |option| %>
 				<li>
@@ -32,7 +32,7 @@
 	</ul>
 </nav>
 
-<div class="videos">
+<div class="items">
 <% trending.each do |item| %>
     <%= rendered "components/item" %>
 <% end %>

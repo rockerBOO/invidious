@@ -2,15 +2,15 @@
     <% if subscriptions.includes? ucid %>
             <form action="/subscription_ajax?action_remove_subscriptions=1&c=<%= ucid %>&referer=<%= env.get("current_page") %>" method="post">
                 <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                <button data-type="unsubscribe" id="subscribe" class="pure-button pure-button-primary">
-                    <b><input style="all:unset" type="submit" value="<%= translate(locale, "Unsubscribe") %> | <%= sub_count_text %>"></b>
+                <button data-type="unsubscribe" id="subscribe" class="primary">
+                    <input type="submit" value="<%= translate(locale, "Unsubscribe") %>">
                 </button>
             </form>
     <% else %>
             <form action="/subscription_ajax?action_create_subscription_to_channel=1&c=<%= ucid %>&referer=<%= env.get("current_page") %>" method="post">
                 <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                <button data-type="subscribe" id="subscribe" class="pure-button pure-button-primary">
-                    <b><input style="all:unset" type="submit" value="<%= translate(locale, "Subscribe") %> | <%= sub_count_text %>"></b>
+                <button data-type="subscribe" id="subscribe" class="primary">
+                    <input type="submit" value="<%= translate(locale, "Subscribe") %>">
                 </button>
             </form>
     <% end %>
@@ -29,8 +29,8 @@
     </script>
     <script src="/js/subscribe_widget.js?v=<%= ASSET_COMMIT %>"></script>
 <% else %>
-        <a id="subscribe" class="pure-button pure-button-primary"
-            href="/login?referer=<%= env.get("current_page") %>">
-            <b><%= translate(locale, "Subscribe") %> | <%= sub_count_text %></b>
-        </a>
+        <button type="button" id="subscribe" class="primary"
+            onclick="window.location='/login?referer=<%= env.get("current_page") %>'">
+            <%= translate(locale, "Subscribe") %>
+        </button>
 <% end %>

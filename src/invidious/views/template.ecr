@@ -27,12 +27,10 @@
 
 <body data-dark-pref="<%= dark_mode %>">
 
-							<div>
+							<header class="container">
                 <% if navbar_search %>
-									<div>
 										<div><a href="/" class="index-link pure-menu-heading">Invidious</a></div>
                     <% autofocus = false %><%= rendered "components/search_box" %>
-									</div>
                 <% end %>
 
 							<nav>
@@ -101,7 +99,7 @@
                 </ul>
             </nav>
 
-						</div>
+						</header>
 
             <% if CONFIG.banner %>
                 <div>
@@ -109,9 +107,11 @@
                 </div>
             <% end %>
 
+						<main class="container">
             <%= content %>
+						</main>
 
-            <footer>
+            <footer class="container">
                 <div>
                     <div>
                         <span>

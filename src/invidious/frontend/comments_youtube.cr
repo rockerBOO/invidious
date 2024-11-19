@@ -13,14 +13,9 @@ module Invidious::Frontend::Comments
           )
 
           replies_html = <<-END_HTML
-          <div id="replies" class="pure-g">
-            <div class="pure-u-1-24"></div>
-            <div class="pure-u-23-24">
-              <p>
+          <div class="comment-replies">
                 <a href="javascript:void(0)" data-continuation="#{child["replies"]["continuation"]}"
                   data-onclick="get_youtube_replies" data-load-replies>#{replies_count_text}</a>
-              </p>
-            </div>
           </div>
           END_HTML
         elsif comments["authorId"]? && !comments["singlePost"]?
@@ -32,14 +27,9 @@ module Invidious::Frontend::Comments
           )
 
           replies_html = <<-END_HTML
-          <div class="pure-g">
-            <div class="pure-u-1-24"></div>
-            <div class="pure-u-23-24">
-              <p>
+            <div>
                 <a href="/post/#{child["commentId"]}?ucid=#{comments["authorId"]}">#{replies_count_text}</a>
-              </p>
             </div>
-          </div>
           END_HTML
         end
 
@@ -65,18 +55,29 @@ module Invidious::Frontend::Comments
             str << %(width="16" height="16" />)
           end
         end
+
+        if comments["videoId"]?
+          timestamp_html = <<-END_HTML
+            <a rel="noreferrer noopener" href="https://www.youtube.com/watch?v=#{comments["videoId"]}&lc=#{child["commentId"]}" title="#{translate(locale, "YouTube comment permalink")}"><span title="#{Time.unix(child["published"].as_i64).to_s(translate(locale, "%A %B %-d, %Y"))}">#{translate(locale, "`x` ago", recode_date(Time.unix(child["published"].as_i64), locale))} #{child["isEdited"] == true ? translate(locale, "(edited)") : ""}</span></a>
+          END_HTML
+        elsif comments["authorId"]?
+          timestamp_html = <<-END_HTML
+            <a rel="noreferrer noopener" href="https://www.youtube.com/channel/#{comments["authorId"]}/community?lb=#{child["commentId"]}" title="#{translate(locale, "YouTube comment permalink")}"><span title="#{Time.unix(child["published"].as_i64).to_s(translate(locale, "%A %B %-d, %Y"))}">#{translate(locale, "`x` ago", recode_date(Time.unix(child["published"].as_i64), locale))} #{child["isEdited"] == true ? translate(locale, "(edited)") : ""}</span></a>
+          END_HTML
+        end
         html << <<-END_HTML
-        <div class="pure-g" style="width:100%">
-          <div class="channel-profile pure-u-4-24 pure-u-md-2-24">
-            <img loading="lazy" style="margin-right:1em;margin-top:1em;width:90%" src="#{author_thumbnail}" alt="" />
+        <div class="comment">
+          <div class="channel-profile">
+            <img loading="lazy" src="#{author_thumbnail}" alt="Author thumbnail" />
           </div>
-          <div class="pure-u-20-24 pure-u-md-22-24">
-            <p>
-              <b>
+          <div class="comment-post">
+            <div class="comment-author">
+              <strong>
                 <a class="#{child["authorIsChannelOwner"] == true ? "channel-owner" : ""}" href="#{child["authorUrl"]}">#{author_name}</a>
-              </b>
-              #{sponsor_icon}
-              <p style="white-space:pre-wrap">#{child["contentHtml"]}</p>
+              </strong> #{sponsor_icon} #{timestamp_html}
+
+            </div>
+              <p>#{child["contentHtml"]}</p>
         END_HTML
 
         if child["attachment"]?
@@ -87,22 +88,22 @@ module Invidious::Frontend::Comments
             attachment = attachment["imageThumbnails"][1]
 
             html << <<-END_HTML
-            <div class="pure-g">
-              <div class="pure-u-1 pure-u-md-1-2">
-                <img loading="lazy" style="width:100%" src="/ggpht#{URI.parse(attachment["url"].as_s).request_target}" alt="" />
+            <div>
+              <div>
+                <img loading="lazy" src="/ggpht#{URI.parse(attachment["url"].as_s).request_target}" alt="" />
               </div>
             </div>
             END_HTML
           when "video"
             if attachment["error"]?
               html << <<-END_HTML
-              <div class="pure-g video-iframe-wrapper">
+              <div class="video-iframe-wrapper">
                 <p>#{attachment["error"]}</p>
               </div>
               END_HTML
             else
               html << <<-END_HTML
-              <div class="pure-g video-iframe-wrapper">
+              <div class="video-iframe-wrapper">
                 <iframe class="video-iframe" src='/embed/#{attachment["videoId"]?}?autoplay=0'></iframe>
               </div>
               END_HTML
@@ -142,22 +143,9 @@ module Invidious::Frontend::Comments
         end
 
         html << <<-END_HTML
-        <p>
-          <span title="#{Time.unix(child["published"].as_i64).to_s(translate(locale, "%A %B %-d, %Y"))}">#{translate(locale, "`x` ago", recode_date(Time.unix(child["published"].as_i64), locale))} #{child["isEdited"] == true ? translate(locale, "(edited)") : ""}</span>
-          |
+        <div class="comment-metadata">
         END_HTML
 
-        if comments["videoId"]?
-          html << <<-END_HTML
-            <a rel="noreferrer noopener" href="https://www.youtube.com/watch?v=#{comments["videoId"]}&lc=#{child["commentId"]}" title="#{translate(locale, "YouTube comment permalink")}">[YT]</a>
-            |
-          END_HTML
-        elsif comments["authorId"]?
-          html << <<-END_HTML
-            <a rel="noreferrer noopener" href="https://www.youtube.com/channel/#{comments["authorId"]}/community?lb=#{child["commentId"]}" title="#{translate(locale, "YouTube comment permalink")}">[YT]</a>
-            |
-          END_HTML
-        end
 
         html << <<-END_HTML
           <i class="icon ion-ios-thumbs-up"></i> #{number_with_separator(child["likeCount"])}
@@ -184,7 +172,7 @@ module Invidious::Frontend::Comments
         end
 
         html << <<-END_HTML
-            </p>
+            </div>
             #{replies_html}
           </div>
         </div>
@@ -193,8 +181,8 @@ module Invidious::Frontend::Comments
 
       if comments["continuation"]?
         html << <<-END_HTML
-        <div class="pure-g">
-          <div class="pure-u-1">
+        <div>
+          <div>
             <p>
               <a href="javascript:void(0)" data-continuation="#{comments["continuation"]}"
                 data-onclick="get_youtube_replies" data-load-more #{"data-load-replies" if is_replies}>#{translate(locale, "Load more")}</a>

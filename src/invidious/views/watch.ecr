@@ -77,6 +77,9 @@ we're going to need to do it here in order to allow for translations.
 <div>
     <h1>
         <%= title %>
+    </h1>
+
+		<div>
         <% if params.listen %>
             <a title="<%=translate(locale, "Video mode")%>" href="/watch?<%= env.params.query %>&listen=0">
                 <i class="icon ion-ios-videocam"></i>
@@ -86,7 +89,32 @@ we're going to need to do it here in order to allow for translations.
                 <i class="icon ion-md-headset"></i>
             </a>
         <% end %>
-    </h1>
+		</div>
+
+        <div class="channel-banner">
+            <div>
+								<figure class="channel-profile">
+									<a href="/channel/<%= video.ucid %>">
+											<% if !video.author_thumbnail.empty? %>
+													<img src="/ggpht<%= URI.parse(video.author_thumbnail).request_target %>" alt="" />
+											<% end %>
+									</a>
+
+								<figcaption>
+									<a href="/channel/<%= video.ucid %>">
+											<span id="channel-name"><%= author %></span>
+									</a>
+									<% if !video.author_verified.nil? && video.author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %>
+								</figcaption>
+								</figure>
+            </div>
+
+
+							<div>
+									<% sub_count_text = video.sub_count_text %>
+									<%= rendered "components/subscribe_widget" %>
+							</div>
+        </div>
 
     <% if !video.is_listed %>
         <h3>
@@ -109,9 +137,7 @@ we're going to need to do it here in order to allow for translations.
     <% end %>
 </div>
 
-<div>
-    <div>
-        <div>
+        <div class="video-metadata">
             <span id="watch-on-youtube">
                 <%-
                     link_yt_watch = URI.new(scheme: "https", host: "www.youtube.com", path: "/watch", query: "v=#{video.id}")
@@ -223,46 +249,23 @@ we're going to need to do it here in order to allow for translations.
 
     <div>
 
+
         <div>
-            <div>
-                <a href="/channel/<%= video.ucid %>">
-                    <div class="channel-profile">
-                        <% if !video.author_thumbnail.empty? %>
-                            <img src="/ggpht<%= URI.parse(video.author_thumbnail).request_target %>" alt="" />
-                        <% end %>
-                        <span id="channel-name"><%= author %><% if !video.author_verified.nil? && video.author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %></span>
-                    </div>
-                </a>
-            </div>
-
-							<div>
-									<% sub_count_text = video.sub_count_text %>
-									<%= rendered "components/subscribe_widget" %>
-							</div>
-        </div>
-
-        <div class="h-box">
             <p id="published-date">
                 <% if video.premiere_timestamp.try &.> Time.utc %>
-                    <b><%= video.premiere_timestamp.try { |t| translate(locale, "Premieres `x`", t.to_s("%B %-d, %R UTC")) } %></b>
+                    <strong><%= video.premiere_timestamp.try { |t| translate(locale, "Premieres `x`", t.to_s("%B %-d, %R UTC")) } %></strong>
                 <% else %>
-                    <b><%= translate(locale, "Shared `x`", video.published.to_s("%B %-d, %Y")) %></b>
+                    <strong><%= translate(locale, "Shared `x`", video.published.to_s("%B %-d, %Y")) %></strong>
                 <% end %>
             </p>
 
             <div id="description-box"> <!-- Description -->
                 <% if video.description.size < 200 || params.extend_desc %>
-                    <p class="description" id="descriptionWrapper"><%= video.description_html %></p>
+                    <dialog class="description" id="descriptionWrapper"><%= video.description_html %></dialog>
                 <% else %>
-                    <input id="descexpansionbutton" type="checkbox"/>
-                    <p class="description" id="descriptionWrapper"><%= video.description_html %></p>
-                    <label for="descexpansionbutton">
-                        <a></a>
-                    </label>
+                    <dialog class="description" id="descriptionWrapper"><%= video.description_html %></dialog>
                 <% end %>
             </div>
-
-            <hr>
 
             <% if !video.music.empty? %>
                 <input id="music-desc-expansion" type="checkbox"/>
@@ -283,10 +286,9 @@ we're going to need to do it here in order to allow for translations.
                         </div>
                     <% end %>
                 </div>
-            <hr>
 
             <% end %>
-            <div id="comments" class="comments">
+            <div id="comments">
                 <% if nojs %>
                     <%= comment_html %>
                 <% else %>
@@ -301,72 +303,68 @@ we're going to need to do it here in order to allow for translations.
     </div>
 
     <% if params.related_videos || plid %>
-        <div class="pure-u-1 pure-u-lg-1-5">
+        <div>
             <% if plid %>
-                <div id="playlist" class="h-box"></div>
+                <div id="playlist"></div>
             <% end %>
 
             <% if params.related_videos %>
-                <div class="h-box">
+                <div class="related-videos">
                     <% if !video.related_videos.empty? %>
                         <div <% if plid %>style="display:none"<% end %>>
-                            <div class="pure-control-group">
+                            <div>
                                 <label for="continue"><%= translate(locale, "preferences_continue_label") %></label>
                                 <input name="continue" id="continue" type="checkbox" <% if params.continue %>checked<% end %>>
                             </div>
-                            <hr>
                         </div>
                     <% end %>
 
                     <% video.related_videos.each do |rv| %>
                         <% if rv["id"]? %>
-                            <div class="pure-u-1">
+                            <div class="related-video">
 
-                            <div class="thumbnail">
-                                <%- if !env.get("preferences").as(Preferences).thin_mode -%>
-                                    <a tabindex="-1" href="/watch?v=<%= rv["id"] %>&listen=<%= params.listen %>">
-                                        <img loading="lazy" class="thumbnail" src="/vi/<%= rv["id"] %>/mqdefault.jpg" alt="" />
-                                    </a>
-                                <%- else -%>
-                                    <div class="thumbnail-placeholder"></div>
-                                <%- end -%>
+																<div class="thumbnail">
+																		<%- if !env.get("preferences").as(Preferences).thin_mode -%>
+																				<a tabindex="-1" href="/watch?v=<%= rv["id"] %>&listen=<%= params.listen %>">
+																						<img loading="lazy" src="/vi/<%= rv["id"] %>/mqdefault.jpg" alt="" />
+																				</a>
+																		<%- else -%>
+																				<div class="thumbnail-placeholder"></div>
+																		<%- end -%>
 
-                                <div class="bottom-right-overlay">
-                                    <%- if (length_seconds = rv["length_seconds"]?.try &.to_i?) && length_seconds != 0 -%>
-                                        <p class="length"><%= recode_length_seconds(length_seconds) %></p>
-                                    <%- end -%>
-                                </div>
-                            </div>
+																		<div>
+																				<%- if (length_seconds = rv["length_seconds"]?.try &.to_i?) && length_seconds != 0 -%>
+																						<div class="length"><%= recode_length_seconds(length_seconds) %></div>
+																				<%- end -%>
+																		</div>
+																</div>
 
-                            <div class="video-card-row">
-                                <a href="/watch?v=<%= rv["id"] %>&listen=<%= params.listen %>"><p dir="auto"><%= HTML.escape(rv["title"]) %></p></a>
-                            </div>
+																<div dir="auto">
+																		<a href="/watch?v=<%= rv["id"] %>&listen=<%= params.listen %>"><%= HTML.escape(rv["title"]) %></a>
+																</div>
 
-                            <h5 class="pure-g">
-                                <div class="pure-u-14-24">
+                                <div>
                                     <% if !rv["ucid"].empty? %>
-                                        <b style="width:100%"><a href="/channel/<%= rv["ucid"] %>"><%= rv["author"]? %><% if rv["author_verified"]? == "true" %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %></a></b>
+                                        <a href="/channel/<%= rv["ucid"] %>"><%= rv["author"]? %></a>&nbsp;
+																				<% if rv["author_verified"]? == "true" %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %>
                                     <% else %>
-                                        <b style="width:100%"><%= rv["author"]? %><% if rv["author_verified"]? == "true" %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %></b>
+                                        <%= rv["author"]? %><% if rv["author_verified"]? == "true" %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %>>
                                     <% end %>
                                 </div>
 
-                                <div class="pure-u-10-24" style="text-align:right">
-                                    <b class="width:100%"><%=
+                                <div>
+                                    <%=
                                         views = rv["view_count"]?.try &.to_i?
                                         views ||= rv["view_count_short"]?.try { |x| short_text_to_number(x) }
                                         translate_count(locale, "generic_views_count", views || 0, NumberFormatting::Short)
-                                    %></b>
+                                    %>
                                 </div>
-                            </h5>
 
                             </div>
                         <% end %>
                     <% end %>
                 </div>
             <% end %>
-        </div>
     <% end %>
-</div>
 <script src="/js/comments.js?v=<%= ASSET_COMMIT %>"></script>
 <script src="/js/watch.js?v=<%= ASSET_COMMIT %>"></script>

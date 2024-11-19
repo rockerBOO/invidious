@@ -4,30 +4,27 @@
   author_verified = item.responds_to?(:author_verified) && item.author_verified
 -%>
 
-<div>
-    <div>
+<div class="item">
         <% case item when %>
         <% when SearchChannel %>
             <% if !thin_mode %>
                 <a tabindex="-1" href="/channel/<%= item.ucid %>">
-                    <center>
                         <img loading="lazy" src="/ggpht<%= URI.parse(item.author_thumbnail).request_target.gsub(/=s\d+/, "=s176") %>" alt="" />
-                    </center>
                 </a>
             <%- else -%>
                 <div></div>
             <% end %>
 
-            <div>
-                <div><a href="/channel/<%= item.ucid %>">
-                    <p dir="auto"><%= HTML.escape(item.author) %>
+            <div dir="auto">
+                <a href="/channel/<%= item.ucid %>">
+                    <%= HTML.escape(item.author) %>
                         <%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
-                    </p>
-                </a></div>
+                    
+                </a>
             </div>
 
-            <% if !item.channel_handle.nil? %><p class="channel-name" dir="auto"><%= item.channel_handle %></p><% end %>
-            <p><%= translate_count(locale, "generic_subscribers_count", item.subscriber_count, NumberFormatting::Separator) %></p>
+            <% if !item.channel_handle.nil? %><div class="channel-name" dir="auto"><%= item.channel_handle %></div><% end %>
+            <div><%= translate_count(locale, "generic_subscribers_count", item.subscriber_count, NumberFormatting::Separator) %></div>
             <% if !item.auto_generated && item.channel_handle.nil? %><p><%= translate_count(locale, "generic_videos_count", item.video_count, NumberFormatting::Separator) %></p><% end %>
             <h5><%= item.description_html %></h5>
         <% when SearchHashtag %>
@@ -78,8 +75,8 @@
 										<h4 class="channel-name" dir="auto">
 											<a href="/channel/<%= item.ucid %>">
 													<%= HTML.escape(item.author) %>
-													<%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
 											</a>
+											<%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
 										</h4>
 									<% else %>
 											<h4 class="channel-name" dir="auto">
@@ -108,11 +105,12 @@
                     <a tabindex="-1" href="<%= link_url %>">
                         <img loading="lazy" class="thumbnail" src="/vi/<%= item.id %>/mqdefault.jpg" alt="" />
 
-                        <% if item_watched %>
-                            <div class="watched-overlay"></div>
-                            <div class="watched-indicator" data-length="<%= item.length_seconds %>" data-id="<%= item.id %>"></div>
-                        <% end %>
                     </a>
+
+										<% if item_watched %>
+												<div class="watched-overlay"></div>
+												<div class="watched-indicator" data-length="<%= item.length_seconds %>" data-id="<%= item.id %>"></div>
+										<% end %>
                 <%- else -%>
                     <div class="thumbnail-placeholder"></div>
                 <%- end -%>
@@ -146,28 +144,26 @@
                 </div>
 
                     <%- if item.responds_to?(:live_now) && item.live_now -%>
-                        <p class="length" dir="auto"><i class="icon ion-ios-play-circle"></i>&nbsp;<%= translate(locale, "LIVE") %></p>
+                        <div class="length" dir="auto"><i class="icon ion-ios-play-circle"></i>&nbsp;<%= translate(locale, "LIVE") %></div>
                     <%- elsif item.length_seconds != 0 -%>
-                        <p class="length"><%= recode_length_seconds(item.length_seconds) %></p>
+                        <div class="length" dir="auto"><%= recode_length_seconds(item.length_seconds) %></div>
                     <%- end -%>
             </div>
 
-            <div>
-                <a href="<%= link_url %>"><p dir="auto"><%= HTML.escape(item.title) %></p></a>
+            <div dir="auto">
+                <a href="<%= link_url %>"><%= HTML.escape(item.title) %></a>
             </div>
 
             <div>
-                <div>
+                <div dir="auto">
                     <% if !item.ucid.to_s.empty? %>
                         <a href="/channel/<%= item.ucid %>">
-                            <p class="channel-name" dir="auto"><%= HTML.escape(item.author) %>
+                            <%= HTML.escape(item.author) %>
                                 <%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
-                            </p>
                         </a>
                     <% else %>
-                        <p class="channel-name" dir="auto"><%= HTML.escape(item.author) %>
+                        <%= HTML.escape(item.author) %>
                             <%- if author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end -%>
-                        </p>
                     <% end %>
                 </div>
 
@@ -175,20 +171,19 @@
             </div>
 
             <div>
-                <div>
+                <div dir="auto">
                     <% if item.responds_to?(:premiere_timestamp) && item.premiere_timestamp.try &.> Time.utc %>
-                        <p class="video-data" dir="auto"><%= translate(locale, "Premieres in `x`", recode_date((item.premiere_timestamp.as(Time) - Time.utc).ago, locale)) %></p>
+                        <%= translate(locale, "Premieres in `x`", recode_date((item.premiere_timestamp.as(Time) - Time.utc).ago, locale)) %>
                     <% elsif item.responds_to?(:published) && (Time.utc - item.published) > 1.minute %>
-                        <p class="video-data" dir="auto"><%= translate(locale, "Shared `x` ago", recode_date(item.published, locale)) %></p>
+                        <%= translate(locale, "Shared `x` ago", recode_date(item.published, locale)) %>
                     <% end %>
                 </div>
 
                 <% if item.responds_to?(:views) && item.views %>
-                <div>
-                    <p dir="auto"><%= translate_count(locale, "generic_views_count", item.views || 0, NumberFormatting::Short) %></p>
+                <div dir="auto">
+                    <%= translate_count(locale, "generic_views_count", item.views || 0, NumberFormatting::Short) %>
                 </div>
                 <% end %>
             </div>
         <% end %>
-    </div>
 </div>

@@ -1,6 +1,6 @@
 var video_data = JSON.parse(document.getElementById('video_data').textContent);
 
-var spinnerHTML = '<h3 style="text-align:center"><div class="loading"><i class="icon ion-ios-refresh"></i></div></h3>';
+var spinnerHTML = '<h3><i class="icon ion-ios-refresh"></i></h3>';
 var spinnerHTMLwithHR = spinnerHTML + '<hr>';
 
 String.prototype.supplant = function (o) {
@@ -14,10 +14,10 @@ function toggle_comments(event) {
     var target = event.target;
     var body = target.parentNode.parentNode.parentNode.children[1];
     if (body.style.display === 'none') {
-        target.textContent = '[ − ]';
+        target.textContent = '▼';
         body.style.display = '';
     } else {
-        target.textContent = '[ + ]';
+        target.textContent = '▲';
         body.style.display = 'none';
     }
 }
@@ -75,12 +75,12 @@ function get_youtube_comments() {
     helpers.xhr('GET', url, {retries: 5, entity_name: 'comments'}, {
         on200: function (response) {
             var commentInnerHtml = ' \
-            <div> \
+            <div class="comments-meta"> \
                 <h3> \
-                    <a href="javascript:void(0)">[ − ]</a> \
+                    <a href="javascript:void(0)">▼</a> \
                     {commentsText}  \
                 </h3> \
-                <b> \
+                <strong> \
                 '
                 if (video_data.support_reddit) {
                     commentInnerHtml += ' <a href="javascript:void(0)" data-comments="reddit"> \
@@ -88,9 +88,9 @@ function get_youtube_comments() {
                     </a> \
                     '
                 }
-                commentInnerHtml += ' </b> \
+                commentInnerHtml += ' </strong> \
             </div> \
-            <div>{contentHtml}</div> \
+            <div class="comments">{contentHtml}</div> \
             <hr>'
             commentInnerHtml = commentInnerHtml.supplant({
                 contentHtml: response.contentHtml,
