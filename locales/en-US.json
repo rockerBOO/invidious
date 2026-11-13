@@ -505,6 +505,7 @@
     "channel_tab_posts_label": "Posts",
     "channel_tab_channels_label": "Channels",
     "toggle_theme": "Toggle Theme",
+    "user_menu_label": "User menu",
     "carousel_slide": "Slide {{current}} of {{total}}",
     "carousel_skip": "Skip the Carousel",
     "carousel_go_to": "Go to slide `x`",
