@@ -229,7 +229,7 @@ div.watched-overlay {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255,255,255,.4);
+  background-color: var(--watched-overlay-color);
 }
 
 div.watched-indicator {
@@ -519,73 +519,101 @@ span > select {
  */
 
 .light-theme {
-  --link-color: #335d7a;
-  --link-hover-color: #075A9E;
-  --link-muted-color: #303030;
-  --button-hover-color: #fff;
-  --button-hover-bg-color: rgba(0, 182, 240, 0.75);
-  --button-hover-border-color: rgba(0, 182, 240, 0.75);
-  --button-secondary-color: #335d7a;
+  --fg-color: black;
+  --bg-color: #eee;
+  --accent-color: #044c99;
+  --accent-bg-color: #3eaefd;
+  --secondary-color: #404040;
+  --secondary-bg-color: #dbdbdb;
+  --watched-overlay-color: rgba(255, 255, 255, 0.4);
+
+  --link-color: var(--accent-color);
+  --link-hover-color: var(--fg-color);
+  --link-muted-color: var(--secondary-color);
+  --button-hover-color: var(--fg-color);
+  --button-hover-bg-color: var(--accent-bg-color);
+  --button-hover-border-color: var(--accent-bg-color);
+  --button-secondary-color: var(--accent-color);
   --button-secondary-bg-color: #fff2;
-  --menu-heading-color: #565d64;
+  --menu-heading-color: var(--fg-color);
   --legend-color: #333;
-  --footer-color: #7c7c7c;
-  --error-card-border-color: black;
+  --footer-color: var(--secondary-color);
+  --error-card-border-color: var(--secondary-color);
 }
 
 @media (prefers-color-scheme: light) {
   .no-theme {
-    --link-color: #335d7a;
-    --link-hover-color: #075A9E;
-    --link-muted-color: #303030;
-    --button-hover-color: #fff;
-    --button-hover-bg-color: rgba(0, 182, 240, 0.75);
-    --button-hover-border-color: rgba(0, 182, 240, 0.75);
-    --button-secondary-color: #335d7a;
+    --fg-color: black;
+    --bg-color: #eee;
+    --accent-color: #044c99;
+    --accent-bg-color: #3eaefd;
+    --secondary-color: #404040;
+    --secondary-bg-color: #dbdbdb;
+    --watched-overlay-color: rgba(255, 255, 255, 0.4);
+
+    --link-color: var(--accent-color);
+    --link-hover-color: var(--fg-color);
+    --link-muted-color: var(--secondary-color);
+    --button-hover-color: var(--fg-color);
+    --button-hover-bg-color: var(--accent-bg-color);
+    --button-hover-border-color: var(--accent-bg-color);
+    --button-secondary-color: var(--accent-color);
     --button-secondary-bg-color: #fff2;
     --legend-color: #333;
-    --footer-color: #7c7c7c;
-    --error-card-border-color: black;
+    --footer-color: var(--secondary-color);
+    --error-card-border-color: var(--secondary-color);
   }
 }
 
 .dark-theme {
-  --bg-color: rgba(35, 35, 35, 1);
   --fg-color: #f0f0f0;
-  --link-color: #adadad;
-  --link-hover-color: rgb(0, 182, 240);
-  --button-hover-color: #fff;
-  --button-hover-bg-color: rgba(0, 182, 240, 1);
-  --button-hover-border-color: rgb(0, 182, 240);
-  --button-secondary-color: #ddd;
+  --bg-color: #131313;
+  --accent-color: #27a6ff;
+  --accent-bg-color: #004a7e;
+  --secondary-color: #e3e3e3;
+  --secondary-bg-color: #313131;
+  --watched-overlay-color: rgba(0, 0, 0, 0.4);
+
+  --link-color: var(--accent-color);
+  --link-hover-color: var(--fg-color);
+  --button-hover-color: var(--fg-color);
+  --button-hover-bg-color: var(--accent-bg-color);
+  --button-hover-border-color: var(--accent-bg-color);
+  --button-secondary-color: var(--secondary-color);
   --button-secondary-bg-color: #0002;
   --legend-color: #f0f0f0;
-  --menu-heading-color: #f0f0f0;
-  --footer-color: #adadad;
-  --error-card-border-color: #5e5e5e;
-  --length-badge-bg-color: rgba(255, 255, 255, 0.12);
-  --length-badge-color: #f0f0f0;
-  --input-color: rgba(35, 35, 35, 1);
+  --menu-heading-color: var(--fg-color);
+  --footer-color: var(--secondary-color);
+  --error-card-border-color: var(--secondary-bg-color);
+  --length-badge-bg-color: var(--secondary-bg-color);
+  --length-badge-color: var(--fg-color);
+  --input-color: var(--secondary-bg-color);
 }
 
 @media (prefers-color-scheme: dark) {
   .no-theme {
-    --bg-color: rgba(35, 35, 35, 1);
     --fg-color: #f0f0f0;
-    --link-color: #adadad;
-    --link-hover-color: rgb(0, 182, 240);
-    --button-hover-color: #fff;
-    --button-hover-bg-color: rgba(0, 182, 240, 1);
-    --button-hover-border-color: rgb(0, 182, 240);
-    --button-secondary-color: #ddd;
+    --bg-color: #131313;
+    --accent-color: #27a6ff;
+    --accent-bg-color: #004a7e;
+    --secondary-color: #e3e3e3;
+    --secondary-bg-color: #313131;
+    --watched-overlay-color: rgba(0, 0, 0, 0.4);
+
+    --link-color: var(--accent-color);
+    --link-hover-color: var(--fg-color);
+    --button-hover-color: var(--fg-color);
+    --button-hover-bg-color: var(--accent-bg-color);
+    --button-hover-border-color: var(--accent-bg-color);
+    --button-secondary-color: var(--secondary-color);
     --button-secondary-bg-color: #0002;
     --legend-color: #f0f0f0;
-    --menu-heading-color: #f0f0f0;
-    --footer-color: #adadad;
-    --error-card-border-color: #5e5e5e;
-    --length-badge-bg-color: rgba(255, 255, 255, 0.12);
-    --length-badge-color: #f0f0f0;
-    --input-color: rgba(35, 35, 35, 1);
+    --menu-heading-color: var(--fg-color);
+    --footer-color: var(--secondary-color);
+    --error-card-border-color: var(--secondary-bg-color);
+    --length-badge-bg-color: var(--secondary-bg-color);
+    --length-badge-color: var(--fg-color);
+    --input-color: var(--secondary-bg-color);
   }
 }
 
@@ -608,6 +636,13 @@ span > select {
   color: var(--button-hover-color) !important;
   border-color: var(--button-hover-border-color) !important;
   background-color: var(--button-hover-bg-color) !important;
+}
+
+body.light-theme,
+body.dark-theme,
+body.no-theme {
+  background-color: var(--bg-color);
+  color: var(--fg-color);
 }
 
 .light-theme a,
@@ -719,11 +754,6 @@ span > select {
   color: var(--button-secondary-color);
 }
 
-body.dark-theme {
-  background-color: var(--bg-color);
-  color: var(--fg-color);
-}
-
 .dark-theme .length-watch-page {
   background-color: var(--length-badge-bg-color);
   color: var(--length-badge-color);
@@ -762,11 +792,6 @@ body.dark-theme {
   .no-theme .pure-button-secondary {
     background-color: var(--button-secondary-bg-color);
     color: var(--button-secondary-color);
-  }
-
-  body.no-theme {
-    background-color: var(--bg-color);
-    color: var(--fg-color);
   }
 
   .no-theme .length-watch-page {
