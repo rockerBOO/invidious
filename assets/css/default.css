@@ -488,22 +488,6 @@ footer {
   max-height: 30vh;
 }
 
-.light-theme footer {
-  color: var(--footer-color);
-}
-
-.dark-theme footer {
-  color: var(--footer-color);
-}
-
-.light-theme footer a {
-  color: var(--footer-color) !important;
-}
-
-.dark-theme footer a {
-  color: var(--footer-color) !important;
-}
-
 footer span {
   margin: 4px 0;
   display: block;
@@ -544,6 +528,7 @@ span > select {
   --button-secondary-color: #335d7a;
   --button-secondary-bg-color: #fff2;
   --menu-heading-color: #565d64;
+  --legend-color: #333;
   --footer-color: #7c7c7c;
   --error-card-border-color: black;
 }
@@ -558,6 +543,7 @@ span > select {
     --button-hover-border-color: rgba(0, 182, 240, 0.75);
     --button-secondary-color: #335d7a;
     --button-secondary-bg-color: #fff2;
+    --legend-color: #333;
     --footer-color: #7c7c7c;
     --error-card-border-color: black;
   }
@@ -604,7 +590,63 @@ span > select {
 }
 
 /*
- * Light theme
+ * Theme rules shared by every theme (colors come from the tokens above)
+ */
+
+.light-theme .pure-button-primary:hover,
+.dark-theme .pure-button-primary:hover,
+.no-theme .pure-button-primary:hover,
+.light-theme .pure-button-primary:focus,
+.dark-theme .pure-button-primary:focus,
+.no-theme .pure-button-primary:focus,
+.light-theme .pure-button-secondary:hover,
+.dark-theme .pure-button-secondary:hover,
+.no-theme .pure-button-secondary:hover,
+.light-theme .pure-button-secondary:focus,
+.dark-theme .pure-button-secondary:focus,
+.no-theme .pure-button-secondary:focus {
+  color: var(--button-hover-color) !important;
+  border-color: var(--button-hover-border-color) !important;
+  background-color: var(--button-hover-bg-color) !important;
+}
+
+.light-theme a,
+.dark-theme a,
+.no-theme a,
+.light-theme .simulated_a,
+.dark-theme .simulated_a,
+.no-theme .simulated_a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.light-theme .pure-form legend,
+.dark-theme .pure-form legend,
+.no-theme .pure-form legend {
+  color: var(--legend-color);
+}
+
+.light-theme .error-card,
+.dark-theme .error-card,
+.no-theme .error-card {
+  border: 1px solid var(--error-card-border-color);
+}
+
+.light-theme footer,
+.dark-theme footer,
+.no-theme footer {
+  color: var(--footer-color);
+}
+
+.light-theme footer a,
+.dark-theme footer a,
+.no-theme footer a {
+  color: var(--footer-color) !important;
+}
+
+
+/*
+ * Light-only rules
  */
 
 .light-theme a:hover,
@@ -617,23 +659,9 @@ span > select {
   color: var(--link-hover-color) !important;
 }
 
-.light-theme .pure-button-primary:hover,
-.light-theme .pure-button-primary:focus,
-.light-theme .pure-button-secondary:hover,
-.light-theme .pure-button-secondary:focus {
-  color: var(--button-hover-color) !important;
-  border-color: var(--button-hover-border-color) !important;
-  background-color: var(--button-hover-bg-color) !important;
-}
-
 .light-theme .pure-button-secondary:not(.low-profile) {
   color: var(--button-secondary-color);
   background-color: var(--button-secondary-bg-color);
-}
-
-.light-theme a, .light-theme .simulated_a {
-  color: var(--link-color);
-  text-decoration: none;
 }
 
 /* All links that do not fit with the default color goes here */
@@ -647,10 +675,6 @@ span > select {
   color: var(--menu-heading-color);
 }
 
-.light-theme .error-card {
-  border: 1px solid var(--error-card-border-color);
-}
-
 @media (prefers-color-scheme: light) {
   .no-theme a:hover,
   .no-theme a:active,
@@ -662,23 +686,9 @@ span > select {
     color: var(--link-hover-color) !important;
   }
 
-  .no-theme .pure-button-primary:hover,
-  .no-theme .pure-button-primary:focus,
-  .no-theme .pure-button-secondary:hover,
-  .no-theme .pure-button-secondary:focus {
-    color: var(--button-hover-color) !important;
-    border-color: var(--button-hover-border-color) !important;
-    background-color: var(--button-hover-bg-color) !important;
-  }
-
   .no-theme .pure-button-secondary:not(.low-profile) {
     color: var(--button-secondary-color);
     background-color: var(--button-secondary-bg-color);
-  }
-
-  .no-theme a, .no-theme .simulated_a{
-    color: var(--link-color);
-    text-decoration: none;
   }
 
   /* All links that do not fit with the default color goes here */
@@ -687,27 +697,11 @@ span > select {
   .no-theme .playlist-restricted > ol > li > a {
     color: var(--link-muted-color);
   }
-
-  .no-theme footer {
-    color: var(--footer-color);
-  }
-
-  .no-theme footer a {
-    color: var(--footer-color) !important;
-  }
-
-  .light-theme .pure-menu-heading {
-    color: var(--menu-heading-color);
-  }
-
-  .no-theme .error-card {
-    border: 1px solid var(--error-card-border-color);
-  }
 }
 
 
 /*
- * Dark theme
+ * Dark-only rules
  */
 
 .dark-theme a:hover,
@@ -720,23 +714,9 @@ span > select {
   color: var(--link-hover-color);
 }
 
-.dark-theme .pure-button-primary:hover,
-.dark-theme .pure-button-primary:focus,
-.dark-theme .pure-button-secondary:hover,
-.dark-theme .pure-button-secondary:focus {
-  color: var(--button-hover-color) !important;
-  border-color: var(--button-hover-border-color) !important;
-  background-color: var(--button-hover-bg-color) !important;
-}
-
 .dark-theme .pure-button-secondary {
   background-color: var(--button-secondary-bg-color);
   color: var(--button-secondary-color);
-}
-
-.dark-theme a, .dark-theme .simulated_a {
-  color: var(--link-color);
-  text-decoration: none;
 }
 
 body.dark-theme {
@@ -747,10 +727,6 @@ body.dark-theme {
 .dark-theme .length-watch-page {
   background-color: var(--length-badge-bg-color);
   color: var(--length-badge-color);
-}
-
-.dark-theme .pure-form legend {
-  color: var(--legend-color);
 }
 
 .dark-theme .pure-menu-heading {
@@ -772,36 +748,20 @@ body.dark-theme {
   color: inherit;
 }
 
-.dark-theme .error-card {
-  border: 1px solid var(--error-card-border-color);
-}
-
 @media (prefers-color-scheme: dark) {
   .no-theme a:hover,
   .no-theme a:active,
+  .no-theme summary:hover,
   .no-theme a:focus,
+  .no-theme summary:focus,
   .no-theme .simulated_a:hover,
   .no-theme .simulated_a:active {
     color: var(--link-hover-color);
   }
 
-  .no-theme .pure-button-primary:hover,
-  .no-theme .pure-button-primary:focus,
-  .no-theme .pure-button-secondary:hover,
-  .no-theme .pure-button-secondary:focus {
-    color: var(--button-hover-color) !important;
-    border-color: var(--button-hover-border-color) !important;
-    background-color: var(--button-hover-bg-color) !important;
-  }
-
   .no-theme .pure-button-secondary {
     background-color: var(--button-secondary-bg-color);
     color: var(--button-secondary-color);
-  }
-
-  .no-theme a, .no-theme .simulated_a{
-    color: var(--link-color);
-    text-decoration: none;
   }
 
   body.no-theme {
@@ -812,10 +772,6 @@ body.dark-theme {
   .no-theme .length-watch-page {
     background-color: var(--length-badge-bg-color);
     color: var(--length-badge-color);
-  }
-
-  .no-theme .pure-form legend {
-    color: var(--legend-color);
   }
 
   .no-theme .pure-menu-heading {
@@ -835,18 +791,6 @@ body.dark-theme {
   .no-theme .searchbar input {
     background-color: inherit;
     color: inherit;
-  }
-
-  .no-theme footer {
-    color: var(--footer-color);
-  }
-
-  .no-theme footer a {
-    color: var(--footer-color) !important;
-  }
-
-  .no-theme .error-card {
-    border: 1px solid var(--error-card-border-color);
   }
 }
 
