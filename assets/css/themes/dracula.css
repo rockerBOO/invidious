@@ -1,0 +1,16 @@
+/*
+ * Dracula (dark scheme)
+ * Palette: https://draculatheme.com/contribute
+ */
+
+.theme-dracula {
+  --fg-color: #f8f8f2; /* foreground */
+  --bg-color: #282a36; /* background */
+  --accent-color: #bd93f9; /* purple */
+  --accent-bg-color: #735f98; /* purple mixed with background, distinct from current line */
+  --secondary-color: #b9c3e6; /* comment (#6272a4) lightened for 4.5:1 on surfaces */
+  --secondary-bg-color: #44475a; /* current line */
+  --watched-overlay-color: rgba(0, 0, 0, 0.4);
+
+  --legend-color: #f8f8f2; /* foreground */
+}

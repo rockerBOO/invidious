@@ -114,6 +114,7 @@
     "light": "light",
     "catppuccin-latte": "Catppuccin Latte",
     "catppuccin-macchiato": "Catppuccin Macchiato",
+    "dracula": "Dracula",
     "preferences_thin_mode_label": "Thin mode: ",
     "preferences_category_misc": "Miscellaneous preferences",
     "preferences_automatic_instance_redirect_label": "Automatic instance redirection (fallback to redirect.invidious.io): ",

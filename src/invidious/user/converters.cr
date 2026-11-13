@@ -5,6 +5,7 @@ module Invidious::User::Converters
   THEMES = {
     "catppuccin-latte"     => "light",
     "catppuccin-macchiato" => "dark",
+    "dracula"              => "dark",
   }
 
   def convert_theme(theme)
