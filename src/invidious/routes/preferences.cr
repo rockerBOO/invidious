@@ -253,7 +253,7 @@ module Invidious::Routes::PreferencesRoute
     if user = env.get? "user"
       user = user.as(User)
 
-      case user.preferences.dark_mode
+      case Invidious::User::Converters.theme_scheme(user.preferences.dark_mode)
       when "dark"
         user.preferences.dark_mode = "light"
       else
@@ -264,7 +264,7 @@ module Invidious::Routes::PreferencesRoute
     else
       preferences = env.get("preferences").as(Preferences)
 
-      case preferences.dark_mode
+      case Invidious::User::Converters.theme_scheme(preferences.dark_mode)
       when "dark"
         preferences.dark_mode = "light"
       else

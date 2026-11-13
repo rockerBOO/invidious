@@ -8,7 +8,8 @@ const THEME_LIGHT = 'light';
 
 // TODO: theme state controlled by system
 toggle_theme.addEventListener('click', function () {
-    const isDarkTheme = helpers.storage.get(STORAGE_KEY_THEME) === THEME_DARK;
+    // Named themes build on a light or dark scheme, so ask the page instead of the stored value
+    const isDarkTheme = document.body.classList.contains('dark-theme');
     const newTheme = isDarkTheme ? THEME_LIGHT : THEME_DARK;
     setTheme(newTheme);
     helpers.storage.set(STORAGE_KEY_THEME, newTheme);
@@ -30,17 +31,31 @@ function setTheme(theme) {
     }
 }
 
+/** @param {string} theme */
+function isNamedTheme(theme) {
+    return !!theme && theme !== THEME_DARK && theme !== THEME_LIGHT;
+}
+
 // Handles theme change event caused by other tab
 addEventListener('storage', function (e) {
-    if (e.key === STORAGE_KEY_THEME)
-        setTheme(helpers.storage.get(STORAGE_KEY_THEME));
+    if (e.key === STORAGE_KEY_THEME) {
+        const theme = helpers.storage.get(STORAGE_KEY_THEME);
+        if (!isNamedTheme(theme)) {
+            setTheme(theme);
+        } else if (!new URLSearchParams(location.search).has('dark_mode')) {
+            // Named themes need their stylesheet and body classes from the server.
+            // Pages with ?dark_mode= keep their theme, so two such tabs can't reload each other forever
+            location.reload();
+        }
+    }
 });
 
 // Set theme from preferences on page load
 addEventListener('DOMContentLoaded', function () {
     const prefTheme = document.getElementById('dark_mode_pref').textContent;
     if (prefTheme) {
-        setTheme(prefTheme);
+        // Named themes keep their server-rendered body classes
+        if (!isNamedTheme(prefTheme)) setTheme(prefTheme);
         helpers.storage.set(STORAGE_KEY_THEME, prefTheme);
     }
 });

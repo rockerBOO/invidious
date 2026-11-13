@@ -71,7 +71,7 @@ struct Preferences
         if result.empty?
           CONFIG.default_user_preferences.dark_mode
         else
-          result
+          Invidious::User::Converters.validate_theme(result)
         end
       rescue
         if value.read_bool
@@ -99,7 +99,7 @@ struct Preferences
       when ""
         CONFIG.default_user_preferences.dark_mode
       else
-        node.value
+        Invidious::User::Converters.validate_theme(node.value)
       end
     end
   end

@@ -114,7 +114,7 @@ module Invidious::Routes::BeforeAll
     thin_mode = (thin_mode == "true") || preferences.thin_mode
     locale = env.params.query["hl"]? || preferences.locale
 
-    preferences.dark_mode = dark_mode
+    preferences.dark_mode = Invidious::User::Converters.validate_theme(dark_mode)
     preferences.thin_mode = thin_mode
     preferences.locale = locale
     env.set "preferences", preferences

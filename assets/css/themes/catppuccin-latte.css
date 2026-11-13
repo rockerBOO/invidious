@@ -1,0 +1,16 @@
+/*
+ * Catppuccin Latte (light scheme)
+ * Palette: https://github.com/catppuccin/catppuccin
+ */
+
+.theme-catppuccin-latte {
+  --fg-color: #4c4f69; /* text */
+  --bg-color: #eff1f5; /* base */
+  --accent-color: #1c61e9; /* blue, darkened for 4.5:1 on base */
+  --accent-bg-color: #fdfdff; /* near-white: 1.5:1 against surface0, 4.5:1 with text */
+  --secondary-color: #53566d; /* subtext1 darkened for 4.5:1 on surface0 */
+  --secondary-bg-color: #ccd0da; /* surface0 */
+  --watched-overlay-color: rgba(255, 255, 255, 0.4);
+
+  --legend-color: #53566d; /* subtext1 darkened, as --secondary-color */
+}
