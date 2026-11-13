@@ -1,0 +1,16 @@
+/*
+ * Tokyo Night (dark scheme)
+ * Palette: https://github.com/folke/tokyonight.nvim
+ */
+
+.theme-tokyonight {
+  --fg-color: #c0caf5; /* fg */
+  --bg-color: #1a1b26; /* bg */
+  --accent-color: #7aa2f7; /* blue */
+  --accent-bg-color: #37508f; /* blue0 (#3d59a1) darkened for 4.5:1 with text */
+  --secondary-color: #a9b1d6; /* fg_dark */
+  --secondary-bg-color: #292e42; /* bg_highlight */
+  --watched-overlay-color: rgba(0, 0, 0, 0.4);
+
+  --legend-color: #c0caf5; /* fg */
+}

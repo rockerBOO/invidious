@@ -6,6 +6,7 @@ module Invidious::User::Converters
     "catppuccin-latte"     => "light",
     "catppuccin-macchiato" => "dark",
     "dracula"              => "dark",
+    "tokyonight"           => "dark",
   }
 
   def convert_theme(theme)
