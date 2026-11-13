@@ -1,0 +1,16 @@
+/*
+ * Catppuccin Macchiato (dark scheme)
+ * Palette: https://github.com/catppuccin/catppuccin
+ */
+
+.theme-catppuccin-macchiato {
+  --fg-color: #cad3f5; /* text */
+  --bg-color: #24273a; /* base */
+  --accent-color: #8aadf4; /* blue */
+  --accent-bg-color: #475579; /* blue mixed with base, distinct from surface0 */
+  --secondary-color: #b8c0e0; /* subtext1 */
+  --secondary-bg-color: #363a4f; /* surface0 */
+  --watched-overlay-color: rgba(0, 0, 0, 0.4);
+
+  --legend-color: #cad3f5; /* text */
+}

@@ -3,7 +3,8 @@ module Invidious::User::Converters
 
   # Named themes: value of the dark_mode preference => color scheme it builds on
   THEMES = {
-    "catppuccin-latte" => "light",
+    "catppuccin-latte"     => "light",
+    "catppuccin-macchiato" => "dark",
   }
 
   def convert_theme(theme)
