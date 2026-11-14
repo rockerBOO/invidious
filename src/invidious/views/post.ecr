@@ -2,7 +2,7 @@
 <title>Invidious</title>
 <% end %>
 
-<div>
+<div class="h-box">
     <div id="post" class="comments post-comments">
         <%= IV::Frontend::Comments.template_youtube(post_response.not_nil!, locale, thin_mode, heading_level: 1) %>
     </div>
@@ -10,7 +10,6 @@
     <% if nojs %>
         <hr>
     <% end %>
-    <br />
 
     <div id="comments" class="comments post-comments">
         <% if nojs %>
