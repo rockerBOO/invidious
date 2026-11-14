@@ -13,6 +13,7 @@
 
 .video-js.player-style-youtube .vjs-control-bar {
   background: linear-gradient(rgba(0,0,0,0.1), rgba(0, 0, 0,0.5));
+  color: #fff;
 }
 
 .video-js.player-style-youtube .vjs-slider {
@@ -21,6 +22,10 @@
 
 .video-js.player-style-youtube .vjs-load-progress > div {
   background-color: rgba(255,255,255,0.5);
+}
+
+.video-js.player-style-youtube .vjs-volume-level {
+  background-color: #fff;
 }
 
 .video-js.player-style-youtube .vjs-play-progress {
@@ -134,6 +139,21 @@ ul.vjs-menu-content::-webkit-scrollbar {
   scrollbar-width: none;
 }
 
+/*
+ * Wrap the controls onto a second row when they don't fit (narrow screens),
+ * instead of overflowing the player and widening the page.
+ */
+.video-js .vjs-control-bar {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  height: auto;
+  min-height: 3em;
+}
+
+.vjs-control-bar > .vjs-control {
+  height: 3em;
+}
+
 .vjs-control-bar::-webkit-scrollbar {
   display: none;
 }
@@ -144,62 +164,115 @@ ul.vjs-menu-content::-webkit-scrollbar {
 
 .video-js .vjs-control-bar,
 .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
-  background-color: rgba(35, 35, 35, 0.75);
+  background-color: var(--bg-color);
+  color: var(--fg-color);
 }
 
 .vjs-menu li.vjs-menu-item:focus,
 .vjs-menu li.vjs-menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.75);
-  color: rgba(49, 49, 51, 0.75);
+  background-color: var(--secondary-bg-color);
+  color: var(--fg-color);
 }
 
 .vjs-menu li.vjs-selected,
 .vjs-menu li.vjs-selected:focus,
 .vjs-menu li.vjs-selected:hover {
-  background-color: rgba(0, 182, 240, 0.75);
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+}
+
+/* Focus: an outline instead of video.js's white glow */
+.video-js .vjs-control:focus:before,
+.video-js .vjs-control:hover:before,
+.video-js .vjs-control:focus {
+  text-shadow: none;
+}
+
+.video-js .vjs-slider:focus {
+  text-shadow: none;
+  box-shadow: none;
+}
+
+.video-js .vjs-control:focus-visible,
+.video-js .vjs-menu-button:focus-visible,
+.video-js .vjs-menu li.vjs-menu-item:focus-visible,
+.video-js .vjs-big-play-button:focus-visible {
+  outline: var(--border-width) solid var(--accent-color);
+  outline-offset: calc(var(--border-width) * -1);
+}
+
+.video-js .vjs-menu li.vjs-selected:focus-visible {
+  outline-color: var(--bg-color);
+  outline-offset: calc(var(--border-width) * -2);
+}
+
+.video-js .vjs-slider:focus-visible {
+  outline: var(--border-width) solid var(--accent-color);
+  outline-offset: var(--border-width);
 }
 
 /* Progress Bar */
 .video-js .vjs-slider {
-  background-color: rgba(15, 15, 15, 0.5);
+  background-color: var(--secondary-bg-color);
 }
 
 .video-js .vjs-load-progress,
 .video-js .vjs-load-progress div {
-  background: rgba(87, 87, 88, 1);
+  background: var(--secondary-color);
+}
+
+.video-js .vjs-load-progress {
+  opacity: 0.5;
+}
+
+/*
+ * The YouTube style keeps its own look: the dimming above would multiply with
+ * the translucent white of its child, so undo it and keep the grey base.
+ */
+.video-js.player-style-youtube .vjs-load-progress {
+  opacity: 1;
+  background: rgb(87, 87, 88);
+}
+
+.video-js .vjs-volume-level {
+  background-color: var(--fg-color);
 }
 
 .video-js .vjs-slider:hover,
 .video-js button:hover {
-  color: rgba(0, 182, 240, 1);
+  color: var(--accent-color);
 }
 
 .video-js.player-style-invidious .vjs-play-progress {
-  background-color: rgba(0, 182, 240, 1);
+  background-color: var(--accent-color);
 }
 
 /* Overlay */
 .video-js .vjs-overlay {
-  background-color: rgba(35, 35, 35, 0.75) !important;
+  background-color: var(--bg-color) !important;
 }
 .video-js .vjs-overlay * {
-  color: rgba(255, 255, 255, 1) !important;
+  color: var(--fg-color) !important;
   text-align: center;
 }
 
 /* ProgressBar marker */
 .vjs-marker {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--fg-color);
   z-index: 0;
 }
 
 /* Big "Play" Button */
 .video-js .vjs-big-play-button {
-  background-color: rgba(35, 35, 35, 0.5);
+  background-color: var(--bg-color);
+  border-color: var(--fg-color);
+  color: var(--fg-color);
 }
 
-.video-js:hover .vjs-big-play-button {
-  background-color: rgba(35, 35, 35, 0.75);
+.video-js:hover .vjs-big-play-button,
+.video-js .vjs-big-play-button:focus {
+  background-color: var(--accent-bg-color);
+  border-color: var(--fg-color);
 }
 
 .video-js .vjs-current-time,
@@ -262,5 +335,69 @@ video.video-js {
 @media screen and (max-width: 650px) {
   .vjs-modal-dialog-content {
     overflow-x: hidden;
+  }
+}
+
+/*
+ * Narrow screens: a full-width progress row plus one row of controls. The
+ * breakpoints are viewport-based, which is right for the watch page and for
+ * the embed iframe (its viewport is the player). Hidden: remaining time (the
+ * duration shows the same) and the share button; the audio track menu stays
+ * (video.js hides it itself with one track), and so does the playback rate
+ * because nothing else offers it. The captions are lifted above both rows
+ * (video.js's own .vjs-user-inactive.vjs-playing rule still lowers them when
+ * the bar hides). The volume slider floats over its neighbours instead of
+ * widening the panel, which would re-wrap the controls on hover. The rules
+ * skip .mobile-operations-bar, the separate top bar player.js adds on phones.
+ */
+@media screen and (max-width: 33.75em) {
+  .video-js.player-style-invidious .vjs-progress-control {
+    order: 0;
+    flex-basis: 100%;
+  }
+
+  .video-js.player-style-invidious .vjs-control-bar:not(.mobile-operations-bar) .vjs-remaining-time,
+  .video-js.player-style-invidious .vjs-control-bar:not(.mobile-operations-bar) .vjs-share-control {
+    display: none;
+  }
+
+  .video-js.player-style-invidious .vjs-text-track-display {
+    bottom: 6em;
+  }
+
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-hover,
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal:active,
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active {
+    width: 4em;
+  }
+
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal .vjs-volume-control.vjs-volume-horizontal {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    z-index: 1;
+    margin: 0;
+    background-color: var(--bg-color);
+  }
+}
+
+/*
+ * Narrower: drop the duration, and slim the buttons from 4em to 3.5em, so the
+ * row still fits with the current time, captions, audio and quality menus.
+ */
+@media screen and (max-width: 26em) {
+  .video-js.player-style-invidious .vjs-control-bar:not(.mobile-operations-bar) .vjs-time-divider,
+  .video-js.player-style-invidious .vjs-control-bar:not(.mobile-operations-bar) .vjs-duration {
+    display: none;
+  }
+
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) > .vjs-control:not(.vjs-time-control):not(.vjs-progress-control) {
+    width: 3.5em;
+  }
+
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-hover,
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal:active,
+  .video-js .vjs-control-bar:not(.mobile-operations-bar) .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active {
+    width: 3.5em;
   }
 }
