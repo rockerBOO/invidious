@@ -92,7 +92,7 @@
 
 
     function revoke_token(target) {
-        var row = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        var row = target.closest('.manager-item');
         row.style.display = 'none';
         var count = document.getElementById('count');
         count.textContent--;
@@ -112,7 +112,7 @@
     }
 
     function remove_subscription(target) {
-        var row = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        var row = target.closest('.manager-item');
         row.style.display = 'none';
         var count = document.getElementById('count');
         count.textContent--;

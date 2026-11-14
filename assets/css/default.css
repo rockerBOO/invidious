@@ -1508,6 +1508,12 @@ fieldset > legend:first-child,
   margin: 0;
 }
 
+/* Inside a fieldset (data control) the button lines up with its rows */
+fieldset > .pref-actions {
+  margin-bottom: 0;
+  padding-left: 20em;
+}
+
 @media (max-width: 30em) {
   .pref-row {
     grid-template-columns: minmax(0, 1fr);
@@ -1521,6 +1527,10 @@ fieldset > legend:first-child,
 
   .pref-actions {
     padding-left: calc(var(--secondary-gap) + var(--border-width));
+  }
+
+  fieldset > .pref-actions {
+    padding-left: 0;
   }
 }
 
@@ -1596,6 +1606,55 @@ fieldset > legend:first-child,
   padding-left: 0.5em;
   font-weight: bold;
   overflow-wrap: anywhere;
+}
+
+/*
+ * Token and subscription manager: one list item per entry, the name on the
+ * left (wrapping when long) and the action on the right
+ */
+
+.manager-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0 var(--secondary-gap);
+  padding: 0 0.5em;
+}
+
+.manager-row > * {
+  flex: 1 1 0;
+}
+
+.manager-row > :first-child {
+  flex-grow: 3;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.manager-row > :nth-child(2):not(:last-child) {
+  text-align: center;
+}
+
+.manager-row > :last-child {
+  text-align: end;
+}
+
+/* The rows are list items; their cells keep the look of the h3/h4s they were */
+.manager-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manager-name,
+.manager-action {
+  margin: 1em 0;
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+.manager-meta {
+  margin: 1.33em 0;
+  font-weight: bold;
 }
 
 
