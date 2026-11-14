@@ -61,8 +61,7 @@ module Invidious::Frontend::Pagination
 
   def nav_numeric(locale : String?, *, base_url : String | URI, current_page : Int, show_next : Bool = true)
     return String.build do |str|
-      str << %(<div class="h-box">\n)
-      str << %(<div class="page-nav-container flexible">\n)
+      str << %(<nav class="page-nav-container" aria-label=") << I18n.translate(locale, "pagination_label") << %(">\n)
 
       str << %(<div class="page-prev-container flex-left">)
 
@@ -85,15 +84,13 @@ module Invidious::Frontend::Pagination
 
       str << %(</div>\n)
 
-      str << %(</div>\n)
-      str << %(</div>\n\n)
+      str << %(</nav>\n\n)
     end
   end
 
   def nav_ctoken(locale : String?, *, base_url : String | URI, ctoken : String?, first_page : Bool, params : URI::Params)
     return String.build do |str|
-      str << %(<div class="h-box">\n)
-      str << %(<div class="page-nav-container flexible">\n)
+      str << %(<nav class="page-nav-container" aria-label=") << I18n.translate(locale, "pagination_label") << %(">\n)
 
       str << %(<div class="page-prev-container flex-left">)
 
@@ -114,8 +111,7 @@ module Invidious::Frontend::Pagination
 
       str << %(</div>\n)
 
-      str << %(</div>\n)
-      str << %(</div>\n\n)
+      str << %(</nav>\n\n)
     end
   end
 end

@@ -11,6 +11,8 @@
 
 <%= rendered "components/feed_menu" %>
 
+<h1 class="page-title page-title-small"><%= I18n.translate(locale, "Popular") %></h1>
+
 <div class="item-grid">
 <% popular_videos.each do |item| %>
     <%= rendered "components/item" %>

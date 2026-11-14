@@ -217,6 +217,62 @@ body a.channel-owner {
 }
 
 .feed-menu-item {
+  display: block;
+  padding: 0.5em 1em;
+  color: var(--menu-heading-color, #565d64);
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* A row of links above a feed: left, centre and right thirds */
+.page-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--secondary-gap);
+  padding: 0 1em;
+}
+
+.page-controls > * {
+  flex: 1 1 0;
+}
+
+.page-controls > :nth-child(2):not(:last-child) {
+  text-align: center;
+}
+
+.page-controls > :last-child {
+  text-align: end;
+}
+
+/* A .page-controls row that is a list of links and counts */
+.page-links {
+  margin: 0;
+  list-style: none;
+}
+
+.page-links > li {
+  margin: 1em 0;
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+.trending-types {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Headings over groups of cards (created and saved playlists) */
+.group-title {
+  margin: 1em 0;
+  font-size: 1.17em;
+}
+
+.feed-notice {
   text-align: center;
 }
 
@@ -614,7 +670,12 @@ p.video-data   { margin: 0; font-weight: bold; font-size: 80%; }
  * Page navigation
  */
 
-.page-nav-container { margin: 15px 0 30px 0; }
+.page-nav-container {
+  display: flex;
+  align-items: center;
+  margin: 15px 0 30px 0;
+  padding: 0 1em;
+}
 
 .page-prev-container { text-align: start; }
 .page-next-container { text-align: end; }
@@ -850,7 +911,8 @@ body.no-theme {
   color: var(--link-muted-color);
 }
 
-.light-theme .pure-menu-heading {
+.light-theme .pure-menu-heading,
+.light-theme .feed-menu-item {
   color: var(--menu-heading-color);
 }
 
@@ -895,7 +957,8 @@ body.no-theme {
   color: var(--length-badge-color);
 }
 
-.dark-theme .pure-menu-heading {
+.dark-theme .pure-menu-heading,
+.dark-theme .feed-menu-item {
   color: var(--menu-heading-color);
 }
 
@@ -921,7 +984,8 @@ body.no-theme {
     color: var(--length-badge-color);
   }
 
-  .no-theme .pure-menu-heading {
+  .no-theme .pure-menu-heading,
+  .no-theme .feed-menu-item {
     color: var(--menu-heading-color);
   }
 
