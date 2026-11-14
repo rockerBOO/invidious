@@ -13,4 +13,6 @@
   --watched-overlay-color: rgba(255, 255, 255, 0.4);
 
   --legend-color: #53566d; /* subtext1 darkened, as --secondary-color */
+  --deleted-bg-color: #ebcfd9; /* red (#d20f39), 15% over base: 5.5:1 with text */
+  --deleted-link-color: #1448b0; /* blue darkened further: 5.6:1 on the deleted row */
 }

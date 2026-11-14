@@ -13,4 +13,5 @@
   --watched-overlay-color: rgba(0, 0, 0, 0.4);
 
   --legend-color: #c0caf5; /* fg */
+  --deleted-bg-color: #482e3c; /* red (#f7768e), 21% over bg: 4.8:1 with the link colour */
 }
