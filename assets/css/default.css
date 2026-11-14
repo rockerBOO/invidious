@@ -271,6 +271,70 @@ div {
 
 
 /*
+ * Item cards (videos, channels, playlists, hashtags) and their grid.
+ * 1 to 4 columns at 30em, 45em and 60em; never more than 4.
+ */
+
+.item-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media screen and (min-width: 30em) {
+  .item-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 45em) {
+  .item-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .item-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.item .channel-thumbnail {
+  display: block;
+  margin: 0 auto;
+  width: 56.25%;
+}
+
+/* Card titles are headings (h2, or h3 under a group heading) that keep the
+ * look of the paragraphs they replace */
+.item-title {
+  margin: 1em 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.flex-left > .item-title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Author links stay plain, not underlined like links in running text */
+.item .channel-name a {
+  text-decoration: none;
+}
+
+/* History entries are a plain list of thumbnails */
+ul.item-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history-grid > li {
+  padding-bottom: 1em;
+}
+
+
+/*
  * Video thumbnails
  */
 
@@ -1205,9 +1269,11 @@ h1, h2, h3, h4, h5, p,
   grid-area: 1 / 1 / 2 / 2;
 }
 
-.error-card > .explanation > h4 {
+.error-card > .explanation > h2,
+.error-card > .explanation > h3 {
   grid-area: 1 / 2 / 2 / 3;
   margin: 0;
+  font-size: 1em;
 }
 
 .error-card > .explanation > p {
