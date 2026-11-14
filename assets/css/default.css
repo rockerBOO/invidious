@@ -26,10 +26,31 @@
 }
 
 html,
-body,
-.pure-g,
-.pure-g [class*="pure-u"] {
+body {
   font-family: var(--sans-serif);
+}
+
+/* The parts of Pure's normalize.css that the site relies on */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+
+pre {
+  overflow: auto;
 }
 
 @media (max-width: 30em) {
@@ -390,7 +411,7 @@ div {
   color: var(--button-hover-color);
 }
 
-/* Pure's base .pure-button layout, which the .button class now carries */
+/* Base button layout for button, link and summary elements */
 .button {
   display: inline-block;
   box-sizing: border-box;
@@ -403,8 +424,8 @@ div {
 }
 
 /*
- * Only keyboard focus gets the ring (.button:focus-visible), as with Pure.
- * Browsers without :focus-visible drop this rule and keep their outline.
+ * Only keyboard focus gets the ring (.button:focus-visible). Browsers
+ * without :focus-visible drop this rule and keep their outline.
  */
 .button:focus:not(:focus-visible) {
   outline: 0;
@@ -679,7 +700,7 @@ div.thumbnail > .bottom-right-overlay {
   flex: 1;
 }
 
-/* Pure's .pure-menu-heading look, which the .nav-link class now carries */
+/* Navigation links: the site name and the user links in the header */
 .nav-link {
   display: block;
   padding: 0.5em 1em;
@@ -723,7 +744,7 @@ div.thumbnail > .bottom-right-overlay {
 }
 
 .searchbar input[type="search"]:focus {
-	outline: 0; /* as pure-form did: the focus cue is the thicker bottom border */
+	outline: 0; /* the focus cue is the thicker bottom border */
 	margin: 0;
 	border: 2px solid;
 	border-color: rgba(0,0,0,0);
@@ -1014,10 +1035,6 @@ p.video-data   { margin: 0; font-weight: bold; font-size: 80%; }
   }
 }
 
-.pure-control-group label {
-  word-wrap: normal;
-}
-
 
 /*
  * Theme color tokens
@@ -1298,10 +1315,8 @@ body.no-theme {
 /*
  * Forms and buttons
  *
- * Native controls and Pure's classes get the same look, so views can drop
- * the pure-* classes without a visual change. The ".pure-form ..." selectors
- * repeat Pure's own to match their specificity. Native buttons are themed
- * inside forms only, which leaves out the player's controls.
+ * Native controls and the .button class share one look. Native buttons are
+ * themed inside forms only, which leaves out the player's controls.
  */
 
 form button,
@@ -1341,7 +1356,7 @@ input[type="submit"]:hover,
   border-color: var(--accent-color);
 }
 
-/* Pure's :focus/:active border-radius on links is smaller; keep the corners */
+/* The a:focus/a:active border-radius is smaller; keep the button's corners */
 a.button:focus,
 a.button:active {
   border-radius: var(--radius);
@@ -1380,15 +1395,7 @@ input[type="email"],
 input[type="url"],
 select,
 textarea,
-.pure-form input[type="text"],
-.pure-form input[type="password"],
-.pure-form input[type="number"],
-.pure-form input[type="email"],
-.pure-form input[type="url"],
-.pure-form input[type="search"],
-.form-stacked input[type="search"],
-.pure-form select,
-.pure-form textarea {
+.form-stacked input[type="search"] {
   height: auto;
   padding: var(--secondary-gap);
   /* The boundary keeps >= 3:1 against the page in every theme */
@@ -1405,7 +1412,6 @@ input[type="password"]::placeholder,
 input[type="number"]::placeholder,
 input[type="email"]::placeholder,
 input[type="url"]::placeholder,
-.pure-form input[type="search"]::placeholder,
 .form-stacked input[type="search"]::placeholder,
 textarea::placeholder {
   color: var(--secondary-color);
@@ -1421,17 +1427,7 @@ input[type="checkbox"]:focus-visible,
 input[type="radio"]:focus-visible,
 select:focus,
 textarea:focus,
-.pure-form input[type="text"]:focus,
-.pure-form input[type="password"]:focus,
-.pure-form input[type="number"]:focus,
-.pure-form input[type="email"]:focus,
-.pure-form input[type="url"]:focus,
-.pure-form input[type="search"]:focus,
-.form-stacked input[type="search"]:focus,
-.pure-form input[type="checkbox"]:focus-visible,
-.pure-form input[type="radio"]:focus-visible,
-.pure-form select:focus,
-.pure-form textarea:focus {
+.form-stacked input[type="search"]:focus {
   outline: var(--border-width) solid var(--accent-color);
   outline-offset: calc(var(--secondary-gap) / 3);
   border-color: var(--accent-color);
@@ -1447,24 +1443,21 @@ input[type="file"] {
   color: inherit;
 }
 
-fieldset,
-.pure-form fieldset {
+fieldset {
   margin: var(--gap) 0;
   padding: var(--secondary-gap);
   border: var(--border-width) solid var(--secondary-bg-color);
   border-radius: var(--radius);
 }
 
-legend,
-.pure-form legend {
+legend {
   padding: 0 var(--secondary-gap);
   border-bottom-color: var(--secondary-bg-color);
   color: var(--legend-color);
 }
 
 /* The fieldset's caption sits in its border; later legends stay headings */
-fieldset > legend:first-child,
-.pure-form fieldset > legend:first-child {
+fieldset > legend:first-child {
   width: auto;
   border-bottom: 0;
 }
@@ -1834,9 +1827,6 @@ h1, h2, h3, h4, h5, p,
 
 /* IE11 fixes */
 :-ms-input-placeholder { color: #888; }
-
-/* Wider settings name to less word wrap */
-.pure-form-aligned .pure-control-group label { width: 19em; }
 
 .channel-emoji {
   margin: 0 2px;
