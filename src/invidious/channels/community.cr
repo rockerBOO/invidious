@@ -287,7 +287,8 @@ module Invidious::Channels::Community
 
     if format == "html"
       response = JSON.parse(response)
-      content_html = IV::Frontend::Comments.template_youtube(response, locale, thin_mode)
+      # Posts sit under the channel name (h1), as on the community page
+      content_html = IV::Frontend::Comments.template_youtube(response, locale, thin_mode, heading_level: 2)
 
       response = JSON.build do |json|
         json.object do

@@ -1,7 +1,12 @@
 module Invidious::Frontend::Comments
   extend self
 
-  def template_youtube(comments, locale, thin_mode, is_replies = false)
+  # Each comment is an article headed by its author. The default level 4
+  # puts comments under the "View N comments" h3 that comments.js adds on
+  # the watch and post pages; replies, fetched separately, use it too.
+  def template_youtube(comments, locale, thin_mode, is_replies = false, heading_level = 4)
+    heading = "h#{heading_level}"
+
     String.build do |html|
       root = comments["comments"].as_a
       root.each do |child|
@@ -12,13 +17,14 @@ module Invidious::Frontend::Comments
             I18n::NumberFormatting::Separator
           )
 
+          # get_youtube_replies (comments.js, community.js) replaces the
+          # content of the link's grandparent, the inner div.
           replies_html = <<-END_HTML
-            <div id="replies" class="pure-g">
-              <div class="pure-u-1-24"></div>
-              <div class="pure-u-23-24">
+            <div class="replies">
+              <div>
                 <p>
-                  <a href="javascript:void(0)" data-continuation="#{child["replies"]["continuation"]}"
-                    data-onclick="get_youtube_replies" data-load-replies>#{replies_count_text}</a>
+                  <button type="button" class="simulated_a" data-continuation="#{child["replies"]["continuation"]}"
+                    data-onclick="get_youtube_replies" data-load-replies>#{replies_count_text}</button>
                 </p>
               </div>
             </div>
@@ -32,9 +38,8 @@ module Invidious::Frontend::Comments
           )
 
           replies_html = <<-END_HTML
-            <div class="pure-g">
-              <div class="pure-u-1-24"></div>
-              <div class="pure-u-23-24">
+            <div class="replies">
+              <div>
                 <p>
                   <a href="/post/#{child["commentId"]}?ucid=#{comments["authorId"]}">#{replies_count_text}</a>
                 </p>
@@ -70,17 +75,18 @@ module Invidious::Frontend::Comments
           end
         end
         html << <<-END_HTML
-          <div class="pure-g" style="width:100%">
-            <div class="channel-profile pure-u-4-24 pure-u-md-2-24">
-              <img loading="lazy" style="margin-right:1em;margin-top:1em;width:90%" src="#{author_thumbnail}" alt="" />
+          <article class="comment">
+            <div class="channel-profile comment-avatar">
+              <img loading="lazy" src="#{author_thumbnail}" alt="" />
             </div>
-            <div class="pure-u-20-24 pure-u-md-22-24">
-              <p>
-                <b>
+            <div class="comment-body">
+              <header>
+                <#{heading} class="comment-author">
                   <a class="#{child["authorIsChannelOwner"] == true ? "channel-owner" : ""}" href="#{child["authorUrl"]}">#{author_name}</a>
-                </b>
-                #{sponsor_icon}
-                <p style="white-space:pre-wrap">#{child["contentHtml"]}</p>
+                  #{sponsor_icon}
+                </#{heading}>
+              </header>
+              <p class="comment-content">#{child["contentHtml"]}</p>
           END_HTML
 
         if child["attachment"]?
@@ -91,22 +97,20 @@ module Invidious::Frontend::Comments
             attachment = attachment["imageThumbnails"][1]
 
             html << <<-END_HTML
-              <div class="pure-g">
-                <div class="pure-u-1 pure-u-md-1-2">
-                  <img loading="lazy" style="width:100%" src="/ggpht#{URI.parse(attachment["url"].as_s).request_target}" alt="" />
-                </div>
+              <div class="comment-image">
+                <img loading="lazy" src="/ggpht#{URI.parse(attachment["url"].as_s).request_target}" alt="" />
               </div>
               END_HTML
           when "video"
             if attachment["error"]?
               html << <<-END_HTML
-                <div class="pure-g video-iframe-wrapper">
+                <div class="video-iframe-wrapper">
                   <p>#{attachment["error"]}</p>
                 </div>
                 END_HTML
             else
               html << <<-END_HTML
-                <div class="pure-g video-iframe-wrapper">
+                <div class="video-iframe-wrapper">
                   <iframe class="video-iframe" src='/embed/#{attachment["videoId"]?}?autoplay=0'></iframe>
                 </div>
                 END_HTML
@@ -144,9 +148,11 @@ module Invidious::Frontend::Comments
           end
         end
 
+        published = Time.unix(child["published"].as_i64)
         html << <<-END_HTML
+          <footer>
           <p>
-            <span title="#{Time.unix(child["published"].as_i64).to_s(I18n.translate(locale, "%A %B %-d, %Y"))}">#{I18n.translate(locale, "`x` ago", recode_date(Time.unix(child["published"].as_i64), locale))} #{child["isEdited"] == true ? I18n.translate(locale, "(edited)") : ""}</span>
+            <time datetime="#{published.to_rfc3339}" title="#{published.to_s(I18n.translate(locale, "%A %B %-d, %Y"))}">#{I18n.translate(locale, "`x` ago", recode_date(published, locale))}</time> #{child["isEdited"] == true ? I18n.translate(locale, "(edited)") : ""}
             |
           END_HTML
 
@@ -188,19 +194,22 @@ module Invidious::Frontend::Comments
 
         html << <<-END_HTML
               </p>
+              </footer>
               #{replies_html}
             </div>
-          </div>
+          </article>
           END_HTML
       end
 
       if comments["continuation"]?
+        # get_youtube_replies removes the link's great-grandparent (the outer
+        # div) from the list before appending the next page, so keep both divs.
         html << <<-END_HTML
-          <div class="pure-g">
-            <div class="pure-u-1">
+          <div class="comments-load-more">
+            <div>
               <p>
-                <a href="javascript:void(0)" data-continuation="#{comments["continuation"]}"
-                  data-onclick="get_youtube_replies" data-load-more #{"data-load-replies" if is_replies}>#{I18n.translate(locale, "Load more")}</a>
+                <button type="button" class="simulated_a" data-continuation="#{comments["continuation"]}"
+                  data-onclick="get_youtube_replies" data-load-more #{"data-load-replies" if is_replies}>#{I18n.translate(locale, "Load more")}</button>
               </p>
             </div>
           </div>

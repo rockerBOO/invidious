@@ -205,8 +205,8 @@ button.simulated_a  {
 }
 
 body a.channel-owner {
-  background-color: #008bec;
-  color: #fff;
+  background-color: var(--accent-color);
+  color: var(--bg-color);
   border-radius: 9px;
   padding: 1px 6px;
 }
@@ -351,8 +351,8 @@ div {
 
 .channel-owner:hover,
 .channel-owner:focus {
-  background-color: #a0a0a0;
-  color: rgba(35, 35, 35, 1);
+  background-color: var(--button-hover-bg-color);
+  color: var(--button-hover-color);
 }
 
 .pure-button-primary,
@@ -802,6 +802,74 @@ p.video-data   { margin: 0; font-weight: bold; font-size: 80%; }
   margin-top: 0;
 }
 
+/* Avatar column of fixed width, text column takes the rest */
+.comment {
+  display: flex;
+}
+
+.comment-avatar {
+  flex: none;
+  width: 3.5rem;
+}
+
+.comment-avatar > img {
+  width: 90%;
+  margin-right: 1em;
+  margin-top: 1em;
+}
+
+.comment-body {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The author heading keeps the size and weight of the bold line it
+   replaces; like card author links, its link is not underlined */
+.comment-author {
+  margin: 1em 0;
+  font-size: inherit;
+}
+
+.comment-content {
+  white-space: pre-wrap;
+}
+
+/* Size image carousels from the column, so their slides can't widen it:
+   width 0 drops their min-content contribution, min-width restores full width */
+.comment-body > .carousel {
+  width: 0;
+  min-width: 100%;
+}
+
+.replies {
+  margin-inline-start: calc(var(--gap) / 2);
+}
+
+/* The replies and load-more buttons keep the underline of links in text */
+.comments .replies .simulated_a,
+.comments .comments-load-more .simulated_a {
+  text-decoration-line: underline;
+  text-decoration-color: var(--secondary-color, currentcolor);
+  text-decoration-thickness: var(--border-width);
+}
+
+.comments .replies .simulated_a:hover,
+.comments .replies .simulated_a:active,
+.comments .comments-load-more .simulated_a:hover,
+.comments .comments-load-more .simulated_a:active {
+  text-decoration-color: var(--accent-color, currentcolor);
+}
+
+.comment-image > img {
+  width: 100%;
+}
+
+@media screen and (min-width: 48em) {
+  .comment-image {
+    width: 50%;
+  }
+}
+
 .video-iframe-wrapper {
   position: relative;
   height: 0;
@@ -839,10 +907,10 @@ p.video-data   { margin: 0; font-weight: bold; font-size: 80%; }
 
 
 /*
- * Footer
+ * Footer (the page footer only, not the footers inside comments)
  */
 
-footer {
+.page > footer {
   margin-top: auto;
   padding: 1.5em 0;
   text-align: center;
@@ -860,13 +928,13 @@ footer {
   }
 }
 
-footer ul {
+.page > footer ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-footer li {
+.page > footer li {
   margin: 4px 0;
 }
 
@@ -1046,15 +1114,13 @@ body.no-theme {
   border: 1px solid var(--error-card-border-color);
 }
 
-.light-theme footer,
-.dark-theme footer,
-.no-theme footer {
+/* No theme class in these selectors: the themed a:hover rules must still
+   outrank the footer link colour */
+.page > footer {
   color: var(--footer-color);
 }
 
-.light-theme footer a,
-.dark-theme footer a,
-.no-theme footer a {
+.page > footer a {
   color: var(--footer-color) !important;
 }
 

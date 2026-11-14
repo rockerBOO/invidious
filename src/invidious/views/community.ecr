@@ -26,8 +26,8 @@
         <p><%= error_message %></p>
     </div>
 <% else %>
-    <div class="h-box pure-g comments" id="comments">
-        <%= IV::Frontend::Comments.template_youtube(items.not_nil!, locale, thin_mode) %>
+    <div class="h-box comments" id="comments">
+        <%= IV::Frontend::Comments.template_youtube(items.not_nil!, locale, thin_mode, heading_level: 2) %>
     </div>
 <% end %>
 
