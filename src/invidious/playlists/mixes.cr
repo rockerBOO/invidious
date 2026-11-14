@@ -81,29 +81,31 @@ def fetch_mix(rdid, video_id, cookies = nil, locale = nil)
   })
 end
 
-def template_mix(mix, listen)
+def template_mix(mix, listen, current_id : String? = nil)
   html = <<-END_HTML
-    <h3>
+    <h2 id="playlist-title" class="page-title-small">
       <a href="/mix?list=#{mix["mixId"]}">
         #{mix["title"]}
       </a>
-    </h3>
-    <div class="pure-menu pure-menu-scrollable playlist-restricted">
-      <ol class="pure-menu-list">
+    </h2>
+    <div class="playlist-restricted">
+      <ol>
     END_HTML
 
   mix["videos"].as_a.each do |video|
+    current = video["videoId"] == current_id ? %( aria-current="page") : ""
+
     html += <<-END_HTML
-      <li class="pure-menu-item">
-        <a href="/watch?v=#{video["videoId"]}&list=#{mix["mixId"]}#{listen ? "&listen=1" : ""}">
+      <li>
+        <a href="/watch?v=#{video["videoId"]}&list=#{mix["mixId"]}#{listen ? "&listen=1" : ""}"#{current}>
           <div class="thumbnail">
               <img loading="lazy" class="thumbnail" src="/vi/#{video["videoId"]}/mqdefault.jpg" alt="" />
-              <p class="length">#{recode_length_seconds(video["lengthSeconds"].as_i)}</p>
+              <span class="length">#{recode_length_seconds(video["lengthSeconds"].as_i)}</span>
           </div>
-          <p style="width:100%">#{video["title"]}</p>
-          <p>
-              <b style="width:100%">#{video["author"]}</b>
-          </p>
+          <span class="sidebar-title">#{video["title"]}</span>
+          <span class="sidebar-author">
+              <b>#{video["author"]}</b>
+          </span>
         </a>
       </li>
       END_HTML

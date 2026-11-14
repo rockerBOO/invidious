@@ -334,7 +334,15 @@ we're going to need to do it here in order to allow for translations.
     </div>
 
     <% if params.related_videos || plid %>
-        <aside class="watch-related"<% if params.related_videos %> aria-labelledby="related-videos-title"<% end %>>
+        <%-
+            # Named by whichever headings exist: the playlist h2 (filled in by
+            # watch.js) and the related videos h2. Until the playlist loads, or
+            # without JS, a playlist-only aside falls back to aria-label.
+            related_label_ids = [] of String
+            related_label_ids << "playlist-title" if plid
+            related_label_ids << "related-videos-title" if params.related_videos
+        -%>
+        <aside class="watch-related" aria-labelledby="<%= related_label_ids.join(" ") %>"<% if !params.related_videos %> aria-label="<%= I18n.translate(locale, "playlist_sidebar_label") %>"<% end %>>
             <% if plid %>
                 <div id="playlist" class="h-box"></div>
             <% end %>

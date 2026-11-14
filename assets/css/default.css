@@ -335,9 +335,48 @@ div {
   animation: spin 2s linear infinite;
 }
 
+/* Watch page playlist and mix sidebar (built in playlists.cr / mixes.cr) */
 .playlist-restricted {
+  box-sizing: border-box;
   height: 20em;
   padding-right: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* Positioned: watch.js scrolls to the next video using its offsetTop */
+.playlist-restricted > ol {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.playlist-restricted > ol > li > a {
+  display: block;
+  padding: 0 0.25em;
+  border-radius: var(--radius);
+}
+
+/* Title and author lines (spans, not paragraphs, inside the link) */
+.playlist-restricted .sidebar-title,
+.playlist-restricted .sidebar-author {
+  display: block;
+  margin: 1em 0;
+}
+
+.playlist-restricted .length {
+  display: block;
+}
+
+/*
+ * The current video: an accent bar on the leading edge (>= 4.5:1 vs the page
+ * in every theme) and bold text. A fill would drop the accent link text below
+ * 4.5:1 on the secondary background in some themes.
+ */
+.playlist-restricted > ol > li > a[aria-current] {
+  box-shadow: inset 3px 0 0 var(--accent-color);
+  font-weight: bold;
 }
 
 
