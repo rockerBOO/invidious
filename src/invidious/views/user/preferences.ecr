@@ -5,7 +5,7 @@
 <h1 class="page-title"><%= I18n.translate(locale, "Preferences") %></h1>
 
 <div class="h-box">
-    <form class="pure-form pure-form-aligned" action="/preferences?referer=<%= URI.encode_www_form(referer) %>" method="post">
+    <form action="/preferences?referer=<%= URI.encode_www_form(referer) %>" method="post">
         <fieldset>
             <legend><%= I18n.translate(locale, "preferences_category_player") %></legend>
 
@@ -230,36 +230,40 @@
         <fieldset>
             <legend><%= I18n.translate(locale, "preferences_category_misc") %></legend>
 
-            <div class="pure-control-group">
+            <div class="pref-row">
                 <label for="automatic_instance_redirect"><%= I18n.translate(locale, "preferences_automatic_instance_redirect_label") %></label>
                 <input name="automatic_instance_redirect" id="automatic_instance_redirect" type="checkbox" <% if preferences.automatic_instance_redirect %>checked<% end %>>
             </div>
 
-            <div class="pure-control-group">
+            <div class="pref-row">
                 <label for="search_privacy"><%= I18n.translate(locale, "preferences_search_privacy_label") %></label>
-                <input name="search_privacy" id="search_privacy" type="checkbox" <% if preferences.search_privacy %>checked<% end %>>
-                <span class="preference-description"><%= I18n.translate(locale, "preferences_search_privacy_description") %></span>
+                <div class="pref-controls">
+                    <input name="search_privacy" id="search_privacy" type="checkbox" <% if preferences.search_privacy %>checked<% end %>>
+                    <span class="preference-description"><%= I18n.translate(locale, "preferences_search_privacy_description") %></span>
+                </div>
             </div>
+        </fieldset>
 
-            <% if env.get? "user" %>
+        <% if env.get? "user" %>
+            <fieldset>
                 <legend><%= I18n.translate(locale, "preferences_category_subscription") %></legend>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="watch_history"><%= I18n.translate(locale, "preferences_watch_history_label") %></label>
                     <input name="watch_history" id="watch_history" type="checkbox" <% if preferences.watch_history %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="annotations_subscribed"><%= I18n.translate(locale, "preferences_annotations_subscribed_label") %></label>
                     <input name="annotations_subscribed" id="annotations_subscribed" type="checkbox" <% if preferences.annotations_subscribed %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="max_results"><%= I18n.translate(locale, "preferences_max_results_label") %></label>
                     <input name="max_results" id="max_results" type="number" value="<%= preferences.max_results %>">
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="sort"><%= I18n.translate(locale, "preferences_sort_label") %></label>
                     <select name="sort" id="sort">
                         <% {"published", "published - reverse", "alphabetically", "alphabetically - reverse", "channel name", "channel name - reverse"}.each do |option| %>
@@ -268,7 +272,7 @@
                     </select>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <% if preferences.unseen_only %>
                         <label for="latest_only"><%= I18n.translate(locale, "Only show latest unwatched video from channel: ") %></label>
                     <% else %>
@@ -277,30 +281,32 @@
                     <input name="latest_only" id="latest_only" type="checkbox" <% if preferences.latest_only %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="unseen_only"><%= I18n.translate(locale, "preferences_unseen_only_label") %></label>
                     <input name="unseen_only" id="unseen_only" type="checkbox" <% if preferences.unseen_only %>checked<% end %>>
                 </div>
 
                 <% if CONFIG.enable_user_notifications %>
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="notifications_only"><%= I18n.translate(locale, "preferences_notifications_only_label") %></label>
                     <input name="notifications_only" id="notifications_only" type="checkbox" <% if preferences.notifications_only %>checked<% end %>>
                 </div>
 
                 <% # Web notifications are only supported over HTTPS %>
                 <% if Kemal.config.ssl || CONFIG.https_only %>
-                    <div class="pure-control-group">
+                    <p>
                         <a href="#" data-onclick="notification_requestPermission"><%= I18n.translate(locale, "Enable web notifications") %></a>
-                    </div>
+                    </p>
                 <% end %>
                 <% end %>
-            <% end %>
+            </fieldset>
+        <% end %>
 
-            <% if env.get?("user") && CONFIG.admins.includes? env.get?("user").as(Invidious::User).email %>
+        <% if env.get?("user") && CONFIG.admins.includes? env.get?("user").as(Invidious::User).email %>
+            <fieldset>
                 <legend><%= I18n.translate(locale, "preferences_category_admin") %></legend>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="admin_default_home"><%= I18n.translate(locale, "preferences_default_home_label") %></label>
                     <select name="admin_default_home" id="admin_default_home">
                         <% feed_options.each do |option| %>
@@ -309,88 +315,87 @@
                     </select>
                 </div>
 
-                <div class="pure-control-group">
-                    <label for="admin_feed_menu"><%= I18n.translate(locale, "preferences_feed_menu_label") %></label>
-                    <% (feed_options.size - 1).times do |index| %>
-                        <select name="admin_feed_menu[<%= index %>]" id="admin_feed_menu[<%= index %>]">
-                            <% feed_options.each do |option| %>
-                                <option value="<%= option %>" <% if CONFIG.default_user_preferences.feed_menu[index]? == option %> selected <% end %>><%= I18n.translate(locale, option.blank? ? "none" : option) %></option>
-                            <% end %>
-                        </select>
-                    <% end %>
+                <div class="pref-row" role="group" aria-labelledby="admin_feed_menu_label">
+                    <span class="pref-label" id="admin_feed_menu_label"><%= I18n.translate(locale, "preferences_feed_menu_label") %></span>
+                    <div class="pref-controls">
+                        <% (feed_options.size - 1).times do |index| %>
+                            <select name="admin_feed_menu[<%= index %>]" id="admin_feed_menu[<%= index %>]" aria-labelledby="admin_feed_menu_label">
+                                <% feed_options.each do |option| %>
+                                    <option value="<%= option %>" <% if CONFIG.default_user_preferences.feed_menu[index]? == option %> selected <% end %>><%= I18n.translate(locale, option.blank? ? "none" : option) %></option>
+                                <% end %>
+                            </select>
+                        <% end %>
+                    </div>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="popular_enabled"><%= I18n.translate(locale, "Popular enabled: ") %></label>
                     <input name="popular_enabled" id="popular_enabled" type="checkbox" <% if CONFIG.popular_enabled %>checked<% end %>>
                 </div>
 
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="captcha_enabled"><%= I18n.translate(locale, "CAPTCHA enabled: ") %></label>
                     <input name="captcha_enabled" id="captcha_enabled" type="checkbox" <% if CONFIG.captcha_enabled %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="login_enabled"><%= I18n.translate(locale, "Login enabled: ") %></label>
                     <input name="login_enabled" id="login_enabled" type="checkbox" <% if CONFIG.login_enabled %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="registration_enabled"><%= I18n.translate(locale, "Registration enabled: ") %></label>
                     <input name="registration_enabled" id="registration_enabled" type="checkbox" <% if CONFIG.registration_enabled %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="statistics_enabled"><%= I18n.translate(locale, "Report statistics: ") %></label>
                     <input name="statistics_enabled" id="statistics_enabled" type="checkbox" <% if CONFIG.statistics_enabled %>checked<% end %>>
                 </div>
 
-                <div class="pure-control-group">
+                <div class="pref-row">
                     <label for="modified_source_code_url"><%= I18n.translate(locale, "adminprefs_modified_source_code_url_label") %></label>
                     <input name="modified_source_code_url" id="modified_source_code_url" type="url" value="<%= CONFIG.modified_source_code_url %>">
                 </div>
-            <% end %>
+            </fieldset>
+        <% end %>
 
-            <% if env.get? "user" %>
+        <% if env.get? "user" %>
+            <fieldset>
                 <legend><%= I18n.translate(locale, "preferences_category_data") %></legend>
 
-                <div class="pure-control-group">
-                    <a href="/clear_watch_history?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Clear watch history") %></a>
-                </div>
+                <ul class="pref-links">
+                    <li>
+                        <a href="/clear_watch_history?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Clear watch history") %></a>
+                    </li>
+                    <li>
+                        <a href="/change_password?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Change password") %></a>
+                    </li>
+                    <li>
+                        <a href="/data_control?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Import/export data") %></a>
+                    </li>
+                    <li>
+                        <a href="/subscription_manager"><%= I18n.translate(locale, "Manage subscriptions") %></a>
+                    </li>
+                    <li>
+                        <a href="/token_manager"><%= I18n.translate(locale, "Manage tokens") %></a>
+                    </li>
+                    <li>
+                        <a href="/feed/playlists"><%= I18n.translate(locale, "View all playlists") %></a>
+                    </li>
+                    <li>
+                        <a href="/feed/history"><%= I18n.translate(locale, "Watch history") %></a>
+                    </li>
+                    <li>
+                        <a href="/delete_account?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Delete account") %></a>
+                    </li>
+                </ul>
+            </fieldset>
+        <% end %>
 
-                <div class="pure-control-group">
-                    <a href="/change_password?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Change password") %></a>
-                </div>
-
-                <div class="pure-control-group">
-                    <a href="/data_control?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Import/export data") %></a>
-                </div>
-
-                <div class="pure-control-group">
-                    <a href="/subscription_manager"><%= I18n.translate(locale, "Manage subscriptions") %></a>
-                </div>
-
-                <div class="pure-control-group">
-                    <a href="/token_manager"><%= I18n.translate(locale, "Manage tokens") %></a>
-                </div>
-
-                <div class="pure-control-group">
-                    <a href="/feed/playlists"><%= I18n.translate(locale, "View all playlists") %></a>
-                </div>
-
-                <div class="pure-control-group">
-                    <a href="/feed/history"><%= I18n.translate(locale, "Watch history") %></a>
-                </div>
-
-                <div class="pure-control-group">
-                    <a href="/delete_account?referer=<%= URI.encode_www_form(referer) %>"><%= I18n.translate(locale, "Delete account") %></a>
-                </div>
-            <% end %>
-
-            <div class="pure-controls">
-                <button type="submit" class="pure-button pure-button-primary"><%= I18n.translate(locale, "Save preferences") %></button>
-            </div>
-        </fieldset>
+        <div class="pref-actions">
+            <button type="submit" class="pure-button pure-button-primary"><%= I18n.translate(locale, "Save preferences") %></button>
+        </div>
     </form>
 </div>

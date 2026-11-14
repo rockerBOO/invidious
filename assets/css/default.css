@@ -1448,15 +1448,13 @@ fieldset > legend:first-child,
 
 /*
  * Preferences: a label column and a control column per row, stacked on
- * narrow screens (at the same width as Pure's aligned forms). The column
- * and gap line up with the Pure rows below (19em label, 1em margin and the
- * space between the inline-block label and control).
+ * narrow screens. The save button lines up with the controls.
  */
 
 .pref-row {
   display: grid;
   grid-template-columns: 19em minmax(0, 1fr);
-  column-gap: 1.25em;
+  column-gap: 1em;
   align-items: center;
   margin-bottom: 0.5em;
 }
@@ -1491,6 +1489,25 @@ fieldset > legend:first-child,
   max-width: 12em;
 }
 
+.pref-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pref-links li {
+  margin-bottom: 0.5em;
+}
+
+.pref-actions {
+  margin: 1.5em 0;
+  padding-left: calc(20em + var(--secondary-gap) + var(--border-width));
+}
+
+.pref-actions > button {
+  margin: 0;
+}
+
 @media (max-width: 30em) {
   .pref-row {
     grid-template-columns: minmax(0, 1fr);
@@ -1499,8 +1516,11 @@ fieldset > legend:first-child,
 
   .pref-row > label,
   .pref-row > .pref-label {
-    max-width: 19em;
     text-align: left;
+  }
+
+  .pref-actions {
+    padding-left: calc(var(--secondary-gap) + var(--border-width));
   }
 }
 
@@ -1654,7 +1674,6 @@ h1, h2, h3, h4, h5, p,
 
 .preference-description {
   width: 250px;
-  padding-left: 10px;
   display: inline-block;
   vertical-align: top;
 }
