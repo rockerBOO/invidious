@@ -101,7 +101,7 @@
                     <p><%=I18n.translate(locale, "timeline_parse_error_placeholder_message")%></p>
                 </div>
                 <details>
-                    <summary class="pure-button pure-button-secondary"><%=I18n.translate(locale, "timeline_parse_error_show_technical_details")%></summary>
+                    <summary class="button button-secondary"><%=I18n.translate(locale, "timeline_parse_error_show_technical_details")%></summary>
                     <pre class="error-issue-template"><%=Errors.get_issue_template(env, item.parse_exception)[1]%></pre>
                 </details>
             </div>
@@ -138,7 +138,7 @@
                     <%- if env.get? "show_watched" -%>
                         <form data-onsubmit="return_false" action="/watch_ajax?action=mark_watched&id=<%= item.id %>&referer=<%= env.get("current_page") %>" method="post">
                             <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                            <button type="submit" class="pure-button pure-button-secondary low-profile"
+                            <button type="submit" class="button button-secondary low-profile"
                                     data-onclick="mark_watched" data-id="<%= item.id %>">
                                 <i data-mouse="switch_classes" data-switch-classes="ion-ios-eye-off,ion-ios-eye" class="icon ion-ios-eye"></i>
                             </button>
@@ -149,14 +149,14 @@
                         <%- form_parameters = "action=add_video&video_id=#{item.id}&playlist_id=#{plid_form}&referer=#{env.get("current_page")}" -%>
                         <form data-onsubmit="return_false" action="/playlist_ajax?<%= form_parameters %>" method="post">
                             <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                            <button type="submit" class="pure-button pure-button-secondary low-profile"
+                            <button type="submit" class="button button-secondary low-profile"
                                     data-onclick="add_playlist_item" aria-label="<%= I18n.translate(locale, "Add to playlist") %>" data-id="<%= item.id %>" data-plid="<%= plid_form %>"><i class="icon ion-md-add"></i></button>
                         </form>
                     <%- elsif item.is_a?(PlaylistVideo) && (plid_form = env.get?("remove_playlist_items")) -%>
                         <%- form_parameters = "action=remove_video&set_video_id=#{item.index}&playlist_id=#{plid_form}&referer=#{env.get("current_page")}" -%>
                         <form data-onsubmit="return_false" action="/playlist_ajax?<%= form_parameters %>" method="post">
                             <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                            <button type="submit" class="pure-button pure-button-secondary low-profile"
+                            <button type="submit" class="button button-secondary low-profile"
                                     data-onclick="remove_playlist_item" aria-label="<%= I18n.translate(locale, "generic_button_delete") %>" data-index="<%= item.index %>" data-plid="<%= plid_form %>"><i class="icon ion-md-trash"></i></button>
                         </form>
                     <%- end -%>

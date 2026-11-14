@@ -107,7 +107,7 @@ module Invidious::Frontend::WatchPage
       str << "\t\t</select>\n"
       str << "\t</div>\n"
 
-      str << "\t<button type=\"submit\" class=\"pure-button pure-button-primary\">\n"
+      str << "\t<button type=\"submit\" class=\"button button-primary\">\n"
       str << "\t\t<b>" << I18n.translate(locale, "Download") << "</b>\n"
       str << "\t</button>\n"
 

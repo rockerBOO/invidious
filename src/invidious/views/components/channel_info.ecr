@@ -22,7 +22,7 @@
             <% sub_count_text = number_to_short_text(channel.sub_count) %>
             <%= rendered "components/subscribe_widget" %>
 
-            <a class="pure-button pure-button-secondary" dir="auto" href="/feed/channel/<%= ucid %>">
+            <a class="button button-secondary" dir="auto" href="/feed/channel/<%= ucid %>">
                 <i class="icon ion-logo-rss"></i>&nbsp;<%= I18n.translate(locale, "generic_button_rss") %>
             </a>
         </div>

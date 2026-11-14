@@ -11,28 +11,28 @@
 
     <div class="button-container">
         <%- if playlist.is_a?(InvidiousPlaylist) && playlist.author == user.try &.email -%>
-            <a class="pure-button pure-button-secondary low-profile" dir="auto" href="/add_playlist_items?list=<%= plid %>">
+            <a class="button button-secondary low-profile" dir="auto" href="/add_playlist_items?list=<%= plid %>">
                 <i class="icon ion-md-add"></i>&nbsp;<%= I18n.translate(locale, "playlist_button_add_items") %>
             </a>
-            <a class="pure-button pure-button-secondary low-profile" dir="auto" href="/edit_playlist?list=<%= plid %>">
+            <a class="button button-secondary low-profile" dir="auto" href="/edit_playlist?list=<%= plid %>">
                 <i class="icon ion-md-create"></i>&nbsp;<%= I18n.translate(locale, "generic_button_edit") %>
             </a>
-            <a class="pure-button pure-button-secondary low-profile" dir="auto" href="/delete_playlist?list=<%= plid %>">
+            <a class="button button-secondary low-profile" dir="auto" href="/delete_playlist?list=<%= plid %>">
                 <i class="icon ion-md-trash"></i>&nbsp;<%= I18n.translate(locale, "generic_button_delete") %>
             </a>
         <%- else -%>
             <%- if IV::Database::Playlists.exists?(playlist.id) -%>
-                <a class="pure-button pure-button-secondary low-profile" dir="auto" href="/subscribe_playlist?list=<%= plid %>">
+                <a class="button button-secondary low-profile" dir="auto" href="/subscribe_playlist?list=<%= plid %>">
                     <i class="icon ion-md-add"></i>&nbsp;<%= I18n.translate(locale, "Subscribe") %>
                 </a>
             <%- else -%>
-                <a class="pure-button pure-button-secondary low-profile" dir="auto" href="/delete_playlist?list=<%= plid %>">
+                <a class="button button-secondary low-profile" dir="auto" href="/delete_playlist?list=<%= plid %>">
                     <i class="icon ion-md-trash"></i>&nbsp;<%= I18n.translate(locale, "Unsubscribe") %>
                 </a>
             <%- end -%>
         <%- end -%>
 
-        <a class="pure-button pure-button-secondary low-profile" dir="auto" href="/feed/playlist/<%= plid %>">
+        <a class="button button-secondary low-profile" dir="auto" href="/feed/playlist/<%= plid %>">
             <i class="icon ion-logo-rss"></i>&nbsp;<%= I18n.translate(locale, "generic_button_rss") %>
         </a>
     </div>

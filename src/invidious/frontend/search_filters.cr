@@ -24,7 +24,7 @@ module Invidious::Frontend::SearchFilters
       str << "\t\t\t</div>\n"
 
       str << "\t\t\t<div id='filters-apply'>"
-      str << "<button type='submit' class=\"pure-button pure-button-primary\">"
+      str << "<button type='submit' class=\"button button-primary\">"
       str << I18n.translate(locale, "search_filters_apply_button")
       str << "</button></div>\n"
 

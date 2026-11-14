@@ -10,10 +10,10 @@
             <legend><%= I18n.translate(locale, "Delete account?") %></legend>
 
             <div class="form-actions">
-                <button type="submit" name="submit" value="delete_account" class="pure-button pure-button-primary">
+                <button type="submit" name="submit" value="delete_account" class="button button-primary">
                     <%= I18n.translate(locale, "Yes") %>
                 </button>
-                <a class="pure-button" href="<%= URI.encode_www_form(referer) %>">
+                <a class="button" href="<%= URI.encode_www_form(referer) %>">
                     <%= I18n.translate(locale, "No") %>
                 </a>
             </div>

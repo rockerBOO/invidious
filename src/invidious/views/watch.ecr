@@ -184,7 +184,7 @@ we're going to need to do it here in order to allow for translations.
 
                         <input type="hidden" name="csrf_token" value="<%= URI.encode_www_form(env.get?("csrf_token").try &.as(String) || "") %>">
                         <input type="hidden" name="video_id" value="<%= video.id %>">
-                        <button data-onclick="add_playlist_video" data-id="<%= video.id %>" type="submit" class="pure-button pure-button-primary">
+                        <button data-onclick="add_playlist_video" data-id="<%= video.id %>" type="submit" class="button button-primary">
                             <b><%= I18n.translate(locale, "Add to playlist") %></b>
                         </button>
                     </form>

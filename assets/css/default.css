@@ -390,13 +390,33 @@ div {
   color: var(--button-hover-color);
 }
 
-.pure-button-primary,
-.pure-button-secondary {
+/* Pure's base .pure-button layout, which the .button class now carries */
+.button {
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/*
+ * Only keyboard focus gets the ring (.button:focus-visible), as with Pure.
+ * Browsers without :focus-visible drop this rule and keep their outline.
+ */
+.button:focus:not(:focus-visible) {
+  outline: 0;
+}
+
+.button-primary,
+.button-secondary {
   white-space: normal;
   margin: 0 .4em;
 }
 
-.pure-button-secondary.low-profile {
+.button-secondary.low-profile {
   padding: 5px 10px;
   margin: 0;
 }
@@ -657,6 +677,16 @@ div.thumbnail > .bottom-right-overlay {
 .navbar > div,
 .navbar > .user-nav {
   flex: 1;
+}
+
+/* Pure's .pure-menu-heading look, which the .nav-link class now carries */
+.nav-link {
+  display: block;
+  padding: 0.5em 1em;
+  color: var(--menu-heading-color, #565d64);
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .navbar a {
@@ -1181,7 +1211,7 @@ body.no-theme {
   color: var(--link-muted-color);
 }
 
-.light-theme .pure-menu-heading,
+.light-theme .nav-link,
 .light-theme .feed-menu-item {
   color: var(--menu-heading-color);
 }
@@ -1226,7 +1256,7 @@ body.no-theme {
   color: var(--length-badge-color);
 }
 
-.dark-theme .pure-menu-heading,
+.dark-theme .nav-link,
 .dark-theme .feed-menu-item {
   color: var(--menu-heading-color);
 }
@@ -1253,7 +1283,7 @@ body.no-theme {
     color: var(--length-badge-color);
   }
 
-  .no-theme .pure-menu-heading,
+  .no-theme .nav-link,
   .no-theme .feed-menu-item {
     color: var(--menu-heading-color);
   }
@@ -1276,7 +1306,7 @@ body.no-theme {
 
 form button,
 input[type="submit"],
-.pure-button {
+.button {
   font: inherit;
   line-height: 1.2;
   padding: var(--secondary-gap) calc(var(--secondary-gap) * 2);
@@ -1288,79 +1318,57 @@ input[type="submit"],
 }
 
 /* Links styled as buttons keep the button colours, not the link colour */
-a.pure-button {
+a.button {
   color: var(--fg-color);
 }
 
-.pure-button-primary,
-a.pure-button-primary {
+.button-primary,
+a.button-primary {
   background-color: var(--accent-bg-color);
   color: var(--fg-color);
 }
 
-.pure-button-secondary,
-a.pure-button-secondary {
+.button-secondary,
+a.button-secondary {
   border-color: var(--secondary-bg-color);
   background-color: var(--button-secondary-bg-color);
   color: var(--button-secondary-color);
 }
 
-/* Drop Pure's hover gradient and pressed shadow */
-.pure-button:hover,
-.pure-button:focus,
-.pure-button:active {
-  background-image: none;
-  box-shadow: none;
-}
-
-/*
- * Pure drops the outline on every focus. Keep it where :focus-visible is
- * unsupported (the ring below needs it); elsewhere only keyboard focus
- * gets the ring.
- */
-.pure-button:focus {
-  outline: auto;
-}
-
-.pure-button:focus:not(:focus-visible) {
-  outline: 0;
-}
-
 form button:hover,
 input[type="submit"]:hover,
-.pure-button:hover {
+.button:hover {
   border-color: var(--accent-color);
 }
 
 /* Pure's :focus/:active border-radius on links is smaller; keep the corners */
-a.pure-button:focus,
-a.pure-button:active {
+a.button:focus,
+a.button:active {
   border-radius: var(--radius);
 }
 
 /* !important beats the thumbnail overlay's background (.top-left-overlay) */
-.pure-button-secondary:hover {
+.button-secondary:hover {
   color: var(--button-hover-color) !important;
   background-color: var(--button-hover-bg-color) !important;
 }
 
 form button:focus-visible,
 input[type="submit"]:focus-visible,
-.pure-button:focus-visible {
+.button:focus-visible {
   outline: var(--border-width) solid var(--accent-color);
   outline-offset: calc(var(--secondary-gap) / 3);
 }
 
 form button:active,
 input[type="submit"]:active,
-.pure-button:active {
+.button:active {
   border-color: var(--accent-bg-color);
 }
 
 form button:disabled,
 input[type="submit"]:disabled,
-.pure-button:disabled,
-.pure-button-disabled {
+.button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -1614,7 +1622,7 @@ fieldset > .pref-actions {
   margin: 0.25em 0;
 }
 
-/* Lines up with the fields (cancels .pure-button-primary's side margin) */
+/* Lines up with the fields (cancels .button-primary's side margin) */
 .form-stacked button[type="submit"] {
   margin: var(--secondary-gap) 0 0;
 }

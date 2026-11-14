@@ -30,11 +30,11 @@
                 <label for="answer"><%= I18n.translate(locale, "Time (h:mm:ss):") %></label>
                 <input type="text" name="answer" id="answer" placeholder="h:mm:ss">
 
-                <button type="submit" name="action" value="signin" class="pure-button pure-button-primary">
+                <button type="submit" name="action" value="signin" class="button button-primary">
                     <%= I18n.translate(locale, "Register") %>
                 </button>
             <% else %>
-                <button type="submit" name="action" value="signin" class="pure-button pure-button-primary">
+                <button type="submit" name="action" value="signin" class="button button-primary">
                     <%= I18n.translate(locale, "Sign In") %>/<%= I18n.translate(locale, "Register") %>
                 </button>
             <% end %>

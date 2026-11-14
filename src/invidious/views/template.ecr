@@ -38,7 +38,7 @@
             <div class="navbar h-box">
                 <% if navbar_search %>
                     <div>
-                        <a href="/" class="index-link pure-menu-heading">Invidious</a>
+                        <a href="/" class="index-link nav-link">Invidious</a>
                     </div>
                     <div class="searchbar">
                         <% autofocus = false %><%= rendered "components/search_box" %>
@@ -49,7 +49,7 @@
                     <ul class="user-field">
                         <% if env.get? "user" %>
                             <li>
-                                <a id="toggle_theme" href="/toggle_theme?referer=<%= env.get?("current_page") %>" class="pure-menu-heading" title="<%= I18n.translate(locale, "toggle_theme") %>" aria-label="<%= I18n.translate(locale, "toggle_theme") %>">
+                                <a id="toggle_theme" href="/toggle_theme?referer=<%= env.get?("current_page") %>" class="nav-link" title="<%= I18n.translate(locale, "toggle_theme") %>" aria-label="<%= I18n.translate(locale, "toggle_theme") %>">
                                     <% if theme_scheme == "dark" %>
                                         <i class="icon ion-ios-sunny"></i>
                                     <% else %>
@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a id="notification_ticker" title="<%= I18n.translate(locale, "Subscriptions") %>" aria-label="<%= I18n.translate(locale, "Subscriptions") %>" aria-describedby="notification_count" href="/feed/subscriptions" class="pure-menu-heading">
+                                <a id="notification_ticker" title="<%= I18n.translate(locale, "Subscriptions") %>" aria-label="<%= I18n.translate(locale, "Subscriptions") %>" aria-describedby="notification_count" href="/feed/subscriptions" class="nav-link">
                                     <% notification_count = env.get("user").as(Invidious::User).notifications.size %>
                                     <% if CONFIG.enable_user_notifications && notification_count > 0 %>
                                         <span id="notification_count"><%= notification_count %></span> <i class="icon ion-ios-notifications"></i>
@@ -68,7 +68,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a title="<%= I18n.translate(locale, "Preferences") %>" aria-label="<%= I18n.translate(locale, "Preferences") %>" href="/preferences?referer=<%= env.get?("current_page") %>" class="pure-menu-heading">
+                                <a title="<%= I18n.translate(locale, "Preferences") %>" aria-label="<%= I18n.translate(locale, "Preferences") %>" href="/preferences?referer=<%= env.get?("current_page") %>" class="nav-link">
                                     <i class="icon ion-ios-cog"></i>
                                 </a>
                             </li>
@@ -80,12 +80,12 @@
                             <li>
                                 <form action="/signout?referer=<%= env.get?("current_page") %>" method="post">
                                     <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                                    <button type="submit" class="pure-menu-heading simulated_a"><%= I18n.translate(locale, "Log out") %></button>
+                                    <button type="submit" class="nav-link simulated_a"><%= I18n.translate(locale, "Log out") %></button>
                                 </form>
                             </li>
                         <% else %>
                             <li>
-                                <a id="toggle_theme" href="/toggle_theme?referer=<%= env.get?("current_page") %>" class="pure-menu-heading" title="<%= I18n.translate(locale, "toggle_theme") %>" aria-label="<%= I18n.translate(locale, "toggle_theme") %>">
+                                <a id="toggle_theme" href="/toggle_theme?referer=<%= env.get?("current_page") %>" class="nav-link" title="<%= I18n.translate(locale, "toggle_theme") %>" aria-label="<%= I18n.translate(locale, "toggle_theme") %>">
                                     <% if theme_scheme == "dark" %>
                                         <i class="icon ion-ios-sunny"></i>
                                     <% else %>
@@ -94,13 +94,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a title="<%= I18n.translate(locale, "Preferences") %>" aria-label="<%= I18n.translate(locale, "Preferences") %>" href="/preferences?referer=<%= env.get?("current_page") %>" class="pure-menu-heading">
+                                <a title="<%= I18n.translate(locale, "Preferences") %>" aria-label="<%= I18n.translate(locale, "Preferences") %>" href="/preferences?referer=<%= env.get?("current_page") %>" class="nav-link">
                                     <i class="icon ion-ios-cog"></i>
                                 </a>
                             </li>
                             <% if CONFIG.login_enabled %>
                                 <li>
-                                    <a href="/login?referer=<%= env.get?("current_page") %>" class="pure-menu-heading">
+                                    <a href="/login?referer=<%= env.get?("current_page") %>" class="nav-link">
                                         <%= I18n.translate(locale, "Log in") %>
                                     </a>
                                 </li>

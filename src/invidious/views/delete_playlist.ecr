@@ -10,10 +10,10 @@
             <legend><%= I18n.translate(locale, "Delete playlist `x`?", %|"#{HTML.escape(playlist.title)}"|) %></legend>
 
             <div class="form-actions">
-                <button type="submit" name="submit" value="delete_playlist" class="pure-button pure-button-primary">
+                <button type="submit" name="submit" value="delete_playlist" class="button button-primary">
                     <%= I18n.translate(locale, "Yes") %>
                 </button>
-                <a class="pure-button" href="/playlist?list=<%= plid %>">
+                <a class="button" href="/playlist?list=<%= plid %>">
                     <%= I18n.translate(locale, "No") %>
                 </a>
             </div>

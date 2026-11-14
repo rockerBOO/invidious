@@ -4,7 +4,7 @@ module Invidious::Frontend::Pagination
   extend self
 
   private def first_page(str : String::Builder, locale : String?, url : String)
-    str << %(<a href=") << url << %(" class="pure-button pure-button-secondary">)
+    str << %(<a href=") << url << %(" class="button button-secondary">)
 
     if I18n.locale_is_rtl?(locale)
       # Inverted arrow ("first" points to the right)
@@ -23,7 +23,7 @@ module Invidious::Frontend::Pagination
 
   private def previous_page(str : String::Builder, locale : String?, url : String)
     # Link
-    str << %(<a href=") << url << %(" class="pure-button pure-button-secondary">)
+    str << %(<a href=") << url << %(" class="button button-secondary">)
 
     if I18n.locale_is_rtl?(locale)
       # Inverted arrow ("previous" points to the right)
@@ -42,7 +42,7 @@ module Invidious::Frontend::Pagination
 
   private def next_page(str : String::Builder, locale : String?, url : String)
     # Link
-    str << %(<a href=") << url << %(" class="pure-button pure-button-secondary">)
+    str << %(<a href=") << url << %(" class="button button-secondary">)
 
     if I18n.locale_is_rtl?(locale)
       # Inverted arrow ("next" points to the left)
