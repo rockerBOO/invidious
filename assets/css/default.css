@@ -473,6 +473,38 @@ ul.item-grid {
   }
 }
 
+/*
+ * Watch page details: the watch-on links and the stats are plain lists;
+ * the add-to-playlist and download forms stack their label and select.
+ */
+
+.watch-links,
+.watch-stats {
+  margin: 1em 0;
+  padding: 0;
+  list-style: none;
+}
+
+.watch-links {
+  margin-top: 0;
+}
+
+.watch-links li + li,
+.watch-stats li + li {
+  margin-top: 1em;
+}
+
+.watch-form label,
+.watch-form select {
+  display: block;
+  margin: 0.25em 0;
+}
+
+.watch-form select {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 
 /*
  * Video thumbnails
@@ -939,7 +971,13 @@ body.no-theme {
 /* Links in running text: underline, highlighted on hover */
 .light-theme p a,
 .dark-theme p a,
-.no-theme p a {
+.no-theme p a,
+.light-theme .watch-links a,
+.dark-theme .watch-links a,
+.no-theme .watch-links a,
+.light-theme .watch-stats a,
+.dark-theme .watch-stats a,
+.no-theme .watch-stats a {
   text-decoration-line: underline;
   text-decoration-color: var(--secondary-color, currentcolor);
   text-decoration-thickness: var(--border-width);
@@ -950,7 +988,19 @@ body.no-theme {
 .no-theme p a:hover,
 .light-theme p a:active,
 .dark-theme p a:active,
-.no-theme p a:active {
+.no-theme p a:active,
+.light-theme .watch-links a:hover,
+.dark-theme .watch-links a:hover,
+.no-theme .watch-links a:hover,
+.light-theme .watch-links a:active,
+.dark-theme .watch-links a:active,
+.no-theme .watch-links a:active,
+.light-theme .watch-stats a:hover,
+.dark-theme .watch-stats a:hover,
+.no-theme .watch-stats a:hover,
+.light-theme .watch-stats a:active,
+.dark-theme .watch-stats a:active,
+.no-theme .watch-stats a:active {
   text-decoration-color: var(--accent-color, currentcolor);
 }
 
@@ -1383,10 +1433,6 @@ h1, h2, h3, h4, h5, p,
 
 .channel-emoji {
   margin: 0 2px;
-}
-
-#download_widget {
-    width: 100%;
 }
 
 .error-card {

@@ -35,7 +35,7 @@ module Invidious::Frontend::WatchPage
 
     return String.build(4000) do |str|
       str << "<form"
-      str << " class=\"pure-form pure-form-stacked\""
+      str << " class=\"watch-form\""
       str << " action='" << HTML.escape(url) << "'"
       str << " method='post'"
       str << " rel='noopener noreferrer'"
@@ -46,7 +46,7 @@ module Invidious::Frontend::WatchPage
       str << "<input type='hidden' name='id' value='" << video.id << "'/>\n"
       str << "<input type='hidden' name='title' value='" << HTML.escape(video.title) << "'/>\n"
 
-      str << "\t<div class=\"pure-control-group\">\n"
+      str << "\t<div>\n"
 
       str << "\t\t<label for='download_widget'>"
       str << I18n.translate(locale, "Download as: ")

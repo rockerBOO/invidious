@@ -124,7 +124,8 @@ we're going to need to do it here in order to allow for translations.
 <div class="watch-layout<% if !(params.related_videos || plid) %> no-related<% end %>">
     <div class="watch-info">
         <div class="h-box">
-            <span id="watch-on-youtube">
+            <ul class="watch-links">
+            <li id="watch-on-youtube">
                 <%-
                     link_yt_watch = URI.new(scheme: "https", host: "www.youtube.com", path: "/watch", query: "v=#{video.id}")
                     link_yt_embed = URI.new(scheme: "https", host: "www.youtube.com", path: "/embed/#{video.id}")
@@ -137,14 +138,14 @@ we're going to need to do it here in order to allow for translations.
                 -%>
                 <a id="link-yt-watch" rel="noreferrer noopener" data-base-url="<%= link_yt_watch %>" href="<%= link_yt_watch %>"><%= I18n.translate(locale, "videoinfo_watch_on_youTube") %></a>
                 (<a id="link-yt-embed" referrerpolicy="origin-when-cross-origin" rel="noopener" data-base-url="<%= link_yt_embed %>" href="<%= link_yt_embed %>"><%= I18n.translate(locale, "videoinfo_youTube_embed_link") %></a>)
-            </span>
+            </li>
 
-            <p id="watch-on-another-invidious-instance">
+            <li id="watch-on-another-invidious-instance">
                 <%- link_iv_other = IV::Frontend::Misc.redirect_url(env) -%>
                 <a id="link-iv-other" data-base-url="<%= link_iv_other %>" href="<%= link_iv_other %>"><%= I18n.translate(locale, "Switch Invidious Instance") %></a>
-            </p>
+            </li>
 
-            <p id="embed-link">
+            <li id="embed-link">
                 <%-
                     params_iv_embed = env.params.query.dup
                     params_iv_embed.delete_all("v")
@@ -153,9 +154,9 @@ we're going to need to do it here in order to allow for translations.
                     link_iv_embed = IV::HttpServer::Utils.add_params_to_url(link_iv_embed, params_iv_embed)
                 -%>
                 <a id="link-iv-embed" data-base-url="<%= link_iv_embed %>" href="<%= link_iv_embed %>"><%= I18n.translate(locale, "videoinfo_invidious_embed_link") %></a>
-            </p>
+            </li>
 
-            <p id="annotations">
+            <li id="annotations">
                 <% if params.annotations %>
                     <a href="/watch?<%= env.params.query %>&iv_load_policy=3">
                         <%= I18n.translate(locale, "Hide annotations") %>
@@ -165,15 +166,16 @@ we're going to need to do it here in order to allow for translations.
                         <%=I18n.translate(locale, "Show annotations")%>
                     </a>
                 <% end %>
-            </p>
+            </li>
+            </ul>
 
             <% if user %>
                 <% playlists = Invidious::Database::Playlists.select_user_created_playlists(user.email) %>
                 <% if !playlists.empty? %>
-                    <form data-onsubmit="return_false" class="pure-form pure-form-stacked" action="/playlist_ajax?action=add_video" method="post" target="_blank">
-                        <div class="pure-control-group">
+                    <form data-onsubmit="return_false" class="watch-form" action="/playlist_ajax?action=add_video" method="post" target="_blank">
+                        <div>
                             <label for="playlist_id"><%= I18n.translate(locale, "Add to playlist: ") %></label>
-                            <select style="width:100%" name="playlist_id" id="playlist_id">
+                            <select name="playlist_id" id="playlist_id">
                                 <% playlists.each do |plid, playlist_title| %>
                                     <option data-plid="<%= plid %>" value="<%= plid %>" <%= "selected" if user.preferences.default_playlist == plid %>><%= HTML.escape(playlist_title) %></option>
                                 <% end %>
@@ -199,41 +201,43 @@ we're going to need to do it here in order to allow for translations.
 
             <%= Invidious::Frontend::WatchPage.download_widget(locale, video, video_assets) %>
 
-            <p id="views"><i class="icon ion-ios-eye"></i> <%= number_with_separator(video.views) %></p>
-            <p id="likes"><i class="icon ion-ios-thumbs-up"></i> <%= number_with_separator(video.likes) %></p>
-            <p id="dislikes" style="display: none; visibility: hidden;"></p>
+            <ul class="watch-stats">
+            <li id="views"><i class="icon ion-ios-eye"></i> <%= number_with_separator(video.views) %></li>
+            <li id="likes"><i class="icon ion-ios-thumbs-up"></i> <%= number_with_separator(video.likes) %></li>
+            <li id="dislikes" hidden></li>
             <% if video.ai_made %>
-                <p id="ai_made"><%= I18n.translate(locale, "video_details_ai_made") %>
+                <li id="ai_made"><%= I18n.translate(locale, "video_details_ai_made") %>
                     <%= I18n.translate_bool(locale, video.ai_made) %>
-                </p>
+                </li>
             <% end %>
-            <p id="genre"><%= I18n.translate(locale, "Genre: ") %>
+            <li id="genre"><%= I18n.translate(locale, "Genre: ") %>
                 <% if !video.genre_url %>
                     <%= video.genre %>
                 <% else %>
                     <a href="<%= video.genre_url %>"><%= video.genre %></a>
                 <% end %>
-            </p>
+            </li>
             <% if video.license %>
                 <% if video.license.empty? %>
-                    <p id="license"><%= I18n.translate(locale, "License: ") %><%= I18n.translate(locale, "Standard YouTube license") %></p>
+                    <li id="license"><%= I18n.translate(locale, "License: ") %><%= I18n.translate(locale, "Standard YouTube license") %></li>
                 <% else %>
-                    <p id="license"><%= I18n.translate(locale, "License: ") %><%= video.license %></p>
+                    <li id="license"><%= I18n.translate(locale, "License: ") %><%= video.license %></li>
                 <% end %>
             <% end %>
-            <p id="family_friendly"><%= I18n.translate(locale, "Family friendly? ") %><%= I18n.translate_bool(locale, video.is_family_friendly) %></p>
-            <p id="wilson" style="display: none; visibility: hidden;"></p>
-            <p id="rating" style="display: none; visibility: hidden;"></p>
-            <p id="engagement" style="display: none; visibility: hidden;"></p>
+            <li id="family_friendly"><%= I18n.translate(locale, "Family friendly? ") %><%= I18n.translate_bool(locale, video.is_family_friendly) %></li>
+            <li id="wilson" hidden></li>
+            <li id="rating" hidden></li>
+            <li id="engagement" hidden></li>
             <% if video.allowed_regions.size != REGIONS.size %>
-                <p id="allowed_regions">
+                <li id="allowed_regions">
                     <% if video.allowed_regions.size < REGIONS.size // 2 %>
                         <%= I18n.translate(locale, "Whitelisted regions: ") %><%= video.allowed_regions.join(", ") %>
                     <% else %>
                         <%= I18n.translate(locale, "Blacklisted regions: ") %><%= (REGIONS.to_a - video.allowed_regions).join(", ") %>
                     <% end %>
-                </p>
+                </li>
             <% end %>
+            </ul>
         </div>
     </div>
 
