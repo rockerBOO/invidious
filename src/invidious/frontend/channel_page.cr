@@ -25,10 +25,10 @@ module Invidious::Frontend::ChannelPage
         tab_name = tab.to_s.downcase
 
         if channel.tabs.includes? tab_name
-          str << %(<div class="pure-u-1 pure-md-1-3">\n)
+          str << %(<li>\n)
 
           if tab == selected_tab
-            str << "\t<b>"
+            str << %(\t<b aria-current="page">)
             str << I18n.translate(locale, "channel_tab_#{tab_name}_label")
             str << "</b>\n"
           else
@@ -40,7 +40,7 @@ module Invidious::Frontend::ChannelPage
             str << "</a>\n"
           end
 
-          str << "</div>"
+          str << "</li>"
         end
       end
     end

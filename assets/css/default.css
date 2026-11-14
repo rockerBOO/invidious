@@ -168,6 +168,42 @@ button.simulated_a  {
   font-weight: lighter;
 }
 
+/* The channel name is the page's h1; it keeps the size of the header row */
+.channel-name-pronouns > h1,
+.channel-name-pronouns > p {
+  margin: 0;
+  font-size: inherit;
+}
+
+/* A column (like #contents) so its children's margins don't collapse */
+.channel-header {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Links to the channel elsewhere, under the description */
+.channel-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Avatar and name on the left, buttons on the right; wraps on narrow screens */
+.channel-header-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75em;
+  margin: 0.5em 0 1em 0;
+}
+
+.channel-header-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em 0.75em;
+}
+
 body a.channel-owner {
   background-color: #008bec;
   color: #fff;
@@ -270,6 +306,17 @@ body a.channel-owner {
 .group-title {
   margin: 1em 0;
   font-size: 1.17em;
+}
+
+/* Tabs on the left, sort options on the right (layout from .page-controls) */
+.channel-tabs ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.channel-tabs > :first-child {
+  text-align: start;
 }
 
 .feed-notice {

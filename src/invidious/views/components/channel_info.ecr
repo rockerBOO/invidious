@@ -8,57 +8,49 @@
     </div>
 <% end %>
 
-<div class="pure-g h-box flexible title">
-    <div class="pure-u-1-2 flex-left flexible">
+<header class="channel-header h-box">
+    <div class="channel-header-bar">
         <div class="channel-profile">
             <img src="/ggpht<%= channel_profile_pic %>" alt="" />
-            <div class="channel-name-pronouns">
-                <span class="channel-name"><%= author %></span><% if !channel.verified.nil? && channel.verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %>
-                <% if !channel.pronouns.nil? %><br /><span class="channel-pronouns"><%= channel.pronouns %></span><% end %>
-            </div>
+            <hgroup class="channel-name-pronouns">
+                <h1 class="channel-name"><%= author %><% if !channel.verified.nil? && channel.verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %></h1>
+                <% if !channel.pronouns.nil? %><p class="channel-pronouns"><%= channel.pronouns %></p><% end %>
+            </hgroup>
         </div>
-    </div>
 
-    <div class="pure-u-1-2 flex-right flexible button-container">
-        <div class="pure-u">
+        <div class="channel-header-buttons">
             <% sub_count_text = number_to_short_text(channel.sub_count) %>
             <%= rendered "components/subscribe_widget" %>
-        </div>
 
-        <div class="pure-u">
             <a class="pure-button pure-button-secondary" dir="auto" href="/feed/channel/<%= ucid %>">
                 <i class="icon ion-logo-rss"></i>&nbsp;<%= I18n.translate(locale, "generic_button_rss") %>
             </a>
         </div>
     </div>
-</div>
 
-<div class="h-box">
     <div id="descriptionWrapper"><p><span style="white-space:pre-wrap"><%= channel.description_html %></span></p></div>
-</div>
 
-<div class="pure-g h-box">
-    <div class="pure-u-1-2">
-        <div class="pure-u-1 pure-md-1-3">
-            <a href="<%= youtube_url %>"><%= I18n.translate(locale, "View channel on YouTube") %></a>
-        </div>
-        <div class="pure-u-1 pure-md-1-3">
-            <a href="<%= redirect_url %>"><%= I18n.translate(locale, "Switch Invidious Instance") %></a>
-        </div>
+    <ul class="channel-links">
+        <li><a href="<%= youtube_url %>"><%= I18n.translate(locale, "View channel on YouTube") %></a></li>
+        <li><a href="<%= redirect_url %>"><%= I18n.translate(locale, "Switch Invidious Instance") %></a></li>
+    </ul>
+</header>
 
+<nav class="channel-tabs page-controls" aria-label="<%= I18n.translate(locale, "channel_tabs_label") %>">
+    <ul>
         <%= Invidious::Frontend::ChannelPage.generate_tabs_links(locale, channel, selected_tab) %>
-    </div>
-    <div class="pure-u-1-2">
-        <div class="pure-g" style="text-align:end">
+    </ul>
+    <% if !sort_options.empty? %>
+        <ul>
             <% sort_options.each do |sort| %>
-                <div class="pure-u-1 pure-md-1-3">
+                <li>
                     <% if sort_by == sort %>
-                        <b><%= I18n.translate(locale, sort) %></b>
+                        <b aria-current="true"><%= I18n.translate(locale, sort) %></b>
                     <% else %>
                         <a href="<%= relative_url %>?sort_by=<%= sort %>"><%= I18n.translate(locale, sort) %></a>
                     <% end %>
-                </div>
+                </li>
             <% end %>
-        </div>
-    </div>
-</div>
+        </ul>
+    <% end %>
+</nav>

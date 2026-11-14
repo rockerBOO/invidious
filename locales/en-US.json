@@ -506,6 +506,7 @@
     "channel_tab_community_label": "Community",
     "channel_tab_posts_label": "Posts",
     "channel_tab_channels_label": "Channels",
+    "channel_tabs_label": "Channel tabs",
     "toggle_theme": "Toggle Theme",
     "user_menu_label": "User menu",
     "carousel_slide": "Slide {{current}} of {{total}}",
