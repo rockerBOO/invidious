@@ -571,9 +571,25 @@ footer {
   max-height: 30vh;
 }
 
-footer span {
+.footer-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 768px) {
+  .footer-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer li {
   margin: 4px 0;
-  display: block;
 }
 
 /* keyframes */
