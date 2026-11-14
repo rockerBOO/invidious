@@ -90,11 +90,11 @@ we're going to need to do it here in order to allow for translations.
         </span>
         <% end %>
         <% if params.listen %>
-            <a title="<%=I18n.translate(locale, "Video mode")%>" id="link-iv-listen" data-base-url="/watch?<%= env.params.query %>&listen=0" href="/watch?<%= env.params.query %>&listen=0">
+            <a title="<%=I18n.translate(locale, "Video mode")%>" aria-label="<%=I18n.translate(locale, "Video mode")%>" id="link-iv-listen" data-base-url="/watch?<%= env.params.query %>&listen=0" href="/watch?<%= env.params.query %>&listen=0">
                 <i class="icon ion-ios-videocam"></i>
             </a>
         <% else %>
-            <a title="<%=I18n.translate(locale, "Audio mode")%>" id="link-iv-listen" data-base-url="/watch?<%= env.params.query %>&listen=1" href="/watch?<%= env.params.query %>&listen=1">
+            <a title="<%=I18n.translate(locale, "Audio mode")%>" aria-label="<%=I18n.translate(locale, "Audio mode")%>" id="link-iv-listen" data-base-url="/watch?<%= env.params.query %>&listen=1" href="/watch?<%= env.params.query %>&listen=1">
                 <i class="icon ion-md-headset"></i>
             </a>
         <% end %>
@@ -121,8 +121,8 @@ we're going to need to do it here in order to allow for translations.
     <% end %>
 </div>
 
-<div class="pure-g">
-    <div class="pure-u-1 pure-u-lg-1-5">
+<div class="watch-layout<% if !(params.related_videos || plid) %> no-related<% end %>">
+    <div class="watch-info">
         <div class="h-box">
             <span id="watch-on-youtube">
                 <%-
@@ -237,10 +237,9 @@ we're going to need to do it here in order to allow for translations.
         </div>
     </div>
 
-    <div class="pure-u-1 <% if params.related_videos || plid %>pure-u-lg-3-5<% else %>pure-u-md-4-5<% end %>">
-
-        <div class="pure-g h-box flexible title">
-            <div class="pure-u-1-2 flex-left flexible">
+    <div class="watch-main">
+        <div class="h-box">
+            <div class="channel-header-bar">
                 <a href="/channel/<%= video.ucid %>">
                     <div class="channel-profile">
                         <% if !video.author_thumbnail.empty? %>
@@ -249,10 +248,8 @@ we're going to need to do it here in order to allow for translations.
                         <span id="channel-name" class="channel-name"><%= author %><% if !video.author_verified.nil? && video.author_verified %>&nbsp;<i class="icon ion ion-md-checkmark-circle"></i><% end %></span>
                     </div>
                 </a>
-            </div>
 
-            <div class="pure-u-1-2 flex-right flexible button-container">
-                <div class="pure-u">
+                <div class="channel-header-buttons">
                     <% sub_count_text = video.sub_count_text %>
                     <%= rendered "components/subscribe_widget" %>
                 </div>
@@ -333,7 +330,7 @@ we're going to need to do it here in order to allow for translations.
     </div>
 
     <% if params.related_videos || plid %>
-        <div class="pure-u-1 pure-u-lg-1-5">
+        <aside class="watch-related">
             <% if plid %>
                 <div id="playlist" class="h-box"></div>
             <% end %>
@@ -396,7 +393,7 @@ we're going to need to do it here in order to allow for translations.
                     <% end %>
                 </div>
             <% end %>
-        </div>
+        </aside>
     <% end %>
 </div>
 <script src="/js/comments.js?v=<%= ASSET_COMMIT %>"></script>

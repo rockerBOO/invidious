@@ -438,6 +438,43 @@ ul.item-grid {
 
 
 /*
+ * Watch page columns: stacked in source order on small screens; info,
+ * main and related at 1/5, 3/5 and 1/5 from 64em. Without related videos
+ * or a playlist, main is 4/5 wide below the info from 48em, and info and
+ * main are 1/5 and 4/5 from 64em.
+ */
+
+.watch-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media screen and (min-width: 48em) {
+  .watch-layout.no-related {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 1fr);
+  }
+
+  .watch-layout.no-related > .watch-info {
+    grid-column: 1 / -1;
+  }
+}
+
+@media screen and (min-width: 64em) {
+  .watch-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr);
+  }
+
+  .watch-layout.no-related {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 4fr);
+  }
+
+  .watch-layout.no-related > .watch-info {
+    grid-column: auto;
+  }
+}
+
+
+/*
  * Video thumbnails
  */
 
@@ -953,7 +990,6 @@ body.no-theme {
 
 /* All links that do not fit with the default color goes here */
 .light-theme a:not([data-id]) > .icon,
-.light-theme .pure-u-lg-1-5 > .h-box > a[href^="/watch?"],
 .light-theme .playlist-restricted > ol > li > a {
   color: var(--link-muted-color);
 }
@@ -977,7 +1013,6 @@ body.no-theme {
 
   /* All links that do not fit with the default color goes here */
   .no-theme a:not([data-id]) > .icon,
-  .no-theme .pure-u-lg-1-5 > .h-box > a[href^="/watch?"],
   .no-theme .playlist-restricted > ol > li > a {
     color: var(--link-muted-color);
   }
