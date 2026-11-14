@@ -110,10 +110,6 @@ a:active,
   margin-bottom: 20px;
 }
 
-.title {
-  margin: 0.5em 0 1em 0;
-}
-
 /* A flex container */
 .flexible {
   display: flex;
@@ -749,10 +745,6 @@ input[type="search"]::-webkit-search-cancel-button {
     margin: 0.42em 0;
   }
 
-  /* Space out the subscribe & RSS buttons and align them to the left */
-  .title.flexible { display: block; }
-  .title.flexible > .flex-right { margin: 0.75em 0; justify-content: flex-start; }
-
   /* Space out buttons to make them easier to tap */
   .user-field { font-size: 125%; }
   .user-field > :not(:last-child) { margin-right: 1.75em; }
@@ -1343,6 +1335,7 @@ textarea,
 .pure-form input[type="email"],
 .pure-form input[type="url"],
 .pure-form input[type="search"],
+.form-stacked input[type="search"],
 .pure-form select,
 .pure-form textarea {
   height: auto;
@@ -1362,6 +1355,7 @@ input[type="number"]::placeholder,
 input[type="email"]::placeholder,
 input[type="url"]::placeholder,
 .pure-form input[type="search"]::placeholder,
+.form-stacked input[type="search"]::placeholder,
 textarea::placeholder {
   color: var(--secondary-color);
   opacity: 1;
@@ -1382,6 +1376,7 @@ textarea:focus,
 .pure-form input[type="email"]:focus,
 .pure-form input[type="url"]:focus,
 .pure-form input[type="search"]:focus,
+.form-stacked input[type="search"]:focus,
 .pure-form input[type="checkbox"]:focus-visible,
 .pure-form input[type="radio"]:focus-visible,
 .pure-form select:focus,
@@ -1563,10 +1558,16 @@ fieldset > .pref-actions {
 }
 
 .form-stacked input[type="text"],
-.form-stacked input[type="password"] {
+.form-stacked input[type="password"],
+.form-stacked input[type="search"] {
   display: block;
   box-sizing: border-box;
   width: 100%;
+  margin: 0.25em 0;
+}
+
+.form-stacked select {
+  display: block;
   margin: 0.25em 0;
 }
 
@@ -1655,6 +1656,47 @@ fieldset > .pref-actions {
 .manager-meta {
   margin: 1.33em 0;
   font-weight: bold;
+}
+
+
+/*
+ * Playlist and edit playlist: the title on the left and the buttons on the
+ * right, wrapping below the title when they don't fit
+ */
+
+.playlist-header {
+  margin: 0.5em 0 1em;
+}
+
+.playlist-header > .page-title,
+.playlist-header > .playlist-title-field {
+  flex: 1 1 15em;
+}
+
+.playlist-header > .page-title {
+  padding: 0;
+}
+
+/* Keeps the spacing of the h3 that used to wrap the title field */
+.playlist-header > .playlist-title-field {
+  margin: 1.17em 0;
+}
+
+.playlist-header > .button-container {
+  display: flex;
+  flex: 0 1 auto;
+}
+
+.edit-playlist input[name="title"],
+.edit-playlist textarea {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.edit-playlist textarea {
+  display: block;
+  height: 20vh;
+  margin-top: 10px;
 }
 
 

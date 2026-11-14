@@ -190,6 +190,7 @@
     "Delete playlist": "Delete playlist",
     "Create playlist": "Create playlist",
     "Title": "Title",
+    "playlist_description_label": "Description",
     "Playlist privacy": "Playlist privacy",
     "Editing playlist `x`": "Editing playlist `x`",
     "playlist_button_add_items": "Add videos",
