@@ -1526,6 +1526,80 @@ fieldset > legend:first-child,
 
 
 /*
+ * Account forms: labels above full-width fields, buttons in a row. Login
+ * and change password sit in a centred column on wide screens.
+ */
+
+.form-page {
+  box-sizing: border-box;
+}
+
+/* A form page's h1 lines up with its fieldset */
+.h-box > .page-title {
+  padding: 0;
+}
+
+@media screen and (min-width: 64em) {
+  .form-page {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.form-stacked label {
+  display: block;
+  margin: 0.5em 0 0.25em;
+}
+
+.form-stacked input[type="text"],
+.form-stacked input[type="password"] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0.25em 0;
+}
+
+/* Lines up with the fields (cancels .pure-button-primary's side margin) */
+.form-stacked button[type="submit"] {
+  margin: var(--secondary-gap) 0 0;
+}
+
+/* A form that is itself one bordered group of controls (no fieldset needed) */
+.form-boxed {
+  margin: var(--gap) 0;
+  padding: var(--secondary-gap);
+  border: var(--border-width) solid var(--secondary-bg-color);
+  border-radius: var(--radius);
+}
+
+.captcha-image {
+  display: block;
+  width: 50%;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--secondary-gap);
+  margin: var(--secondary-gap) 0;
+}
+
+.form-stacked .form-actions > button[type="submit"] {
+  margin: 0;
+}
+
+/* The access token shown after authorizing (was an h4) */
+.token-value {
+  margin: 1.33em 0;
+  padding-left: 0.5em;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+
+/*
  * Miscellanous
  */
 

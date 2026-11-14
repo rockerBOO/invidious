@@ -66,6 +66,7 @@
     "User ID": "User ID",
     "Password": "Password",
     "Time (h:mm:ss):": "Time (h:mm:ss):",
+    "login_captcha_image_alt": "Clock face showing the time to enter",
     "Sign In": "Sign In",
     "Register": "Register",
     "E-mail": "E-mail",
