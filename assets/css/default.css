@@ -505,6 +505,42 @@ ul.item-grid {
   width: 100%;
 }
 
+/*
+ * Watch page related videos: a plain list of cards whose titles are
+ * h3.item-title under a "Related videos" h2, like the item cards. The
+ * author and the view count share a row, the view count on the right.
+ */
+
+.related-continue {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.related-videos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.related-video-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+  margin: 1.67em 0;
+  font-size: 0.83em;
+}
+
+.related-video-meta > :first-child {
+  overflow-wrap: anywhere;
+}
+
+.related-video-meta > :last-child {
+  flex-shrink: 0;
+  max-width: 50%;
+  text-align: right;
+}
+
 
 /*
  * Video thumbnails
