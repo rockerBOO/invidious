@@ -1,10 +1,11 @@
 module Invidious::Frontend::Comments
   extend self
 
-  # Each comment is an article headed by its author. The default level 4
-  # puts comments under the "View N comments" h3 that comments.js adds on
-  # the watch and post pages; replies, fetched separately, use it too.
-  def template_youtube(comments, locale, thin_mode, is_replies = false, heading_level = 4)
+  # Each comment is an article headed by its author. The default level 3
+  # puts comments under the "View N comments" h2 on the watch and post pages
+  # (added by comments.js, or by the view without JS); replies, fetched
+  # separately, use it too.
+  def template_youtube(comments, locale, thin_mode, is_replies = false, heading_level = 3)
     heading = "h#{heading_level}"
 
     String.build do |html|
@@ -117,7 +118,7 @@ module Invidious::Frontend::Comments
             end
           when "multiImage"
             html << <<-END_HTML
-              <section class="carousel">
+              <div class="carousel">
               <a class="skip-link" href="#skip-#{child["commentId"]}">#{I18n.translate(locale, "carousel_skip")}</a>
               <div class="slides">
               END_HTML
@@ -143,7 +144,7 @@ module Invidious::Frontend::Comments
             html << <<-END_HTML
                 </div>
                 <div id="skip-#{child["commentId"]}"></div>
-              </section>
+              </div>
               END_HTML
           end
         end

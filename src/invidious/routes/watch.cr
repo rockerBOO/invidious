@@ -88,12 +88,17 @@ module Invidious::Routes::Watch
         end
 
         if source == "youtube"
-          comment_html = JSON.parse(Comments.fetch_youtube(id, nil, "html", locale, preferences.thin_mode, region))["contentHtml"]
+          comments_json = JSON.parse(Comments.fetch_youtube(id, nil, "html", locale, preferences.thin_mode, region))
         end
       else
-        comment_html = JSON.parse(Comments.fetch_youtube(id, nil, "html", locale, preferences.thin_mode, region))["contentHtml"]
+        comments_json = JSON.parse(Comments.fetch_youtube(id, nil, "html", locale, preferences.thin_mode, region))
       end
 
+      if comments_json
+        comment_html = comments_json["contentHtml"]
+        # For the comments heading, which comments.js adds when JS is on
+        comment_count = comments_json["commentCount"]?.try &.as_i64?
+      end
       comment_html ||= ""
     end
 

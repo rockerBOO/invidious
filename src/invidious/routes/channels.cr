@@ -318,7 +318,10 @@ module Invidious::Routes::Channels
 
     if nojs
       comments = Comments.fetch_community_post_comments(ucid, id)
-      comment_html = JSON.parse(Comments.parse_youtube(id, comments, "html", locale, thin_mode, is_post: true))["contentHtml"]
+      comments_json = JSON.parse(Comments.parse_youtube(id, comments, "html", locale, thin_mode, is_post: true))
+      comment_html = comments_json["contentHtml"]
+      # For the comments heading, which comments.js adds when JS is on
+      comment_count = comments_json["commentCount"]?.try &.as_i64?
     end
     templated "post"
   end

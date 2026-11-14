@@ -192,6 +192,10 @@ button.simulated_a  {
   font-size: inherit;
 }
 
+.channel-banner {
+  width: 100%;
+}
+
 /* A column (like #contents) so its children's margins don't collapse */
 .channel-header {
   display: flex;
@@ -354,6 +358,27 @@ div {
 .loading {
   display: inline-block;
   animation: spin 2s linear infinite;
+}
+
+/* Spinner shown while comments.js / community.js load comments */
+.loading-spinner {
+  margin: 1em 0;
+  font-size: 1.17em;
+  text-align: center;
+}
+
+/* Notices that aren't headings: CONFIG banner, watch page status lines */
+.banner > p,
+.watch-status {
+  margin: 1em 0;
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+/* Privacy page sections, at the size they had as h3s */
+.privacy-policy h2 {
+  margin: 1em 0;
+  font-size: 1.17em;
 }
 
 /* Watch page playlist and mix sidebar (built in playlists.cr / mixes.cr) */
@@ -1775,9 +1800,15 @@ hr {
   height: 100%;
 }
 
+/* The "Show more" / "Show less" text is the label's ::after (watch.ecr) */
 #descexpansionbutton ~ label {
   order: 1;
   margin-top: 20px;
+  color: var(--link-color);
+}
+
+#descexpansionbutton ~ label:hover {
+  color: var(--link-hover-color);
 }
 
 label[for="descexpansionbutton"]:hover,
@@ -1807,14 +1838,20 @@ h1, h2, h3, h4, h5, p,
   display: block;
 }
 
-#music-desc-expansion ~ label > h3 > .ion-ios-arrow-up,
-#music-desc-expansion:checked ~ label > h3 > .ion-ios-arrow-down {
+#music-desc-expansion ~ h2 > label > .ion-ios-arrow-up,
+#music-desc-expansion:checked ~ h2 > label > .ion-ios-arrow-down {
   display: none;
 }
 
-#music-desc-expansion:checked ~ label > h3 > .ion-ios-arrow-up,
-#music-desc-expansion ~ label > h3 > .ion-ios-arrow-down {
+#music-desc-expansion:checked ~ h2 > label > .ion-ios-arrow-up,
+#music-desc-expansion ~ h2 > label > .ion-ios-arrow-down {
   display: inline;
+}
+
+/* A section of the watch page's main column, at the size it had as an h3 */
+#music-description-title {
+  margin: 1em 0;
+  font-size: 1.17em;
 }
 
 /* Select all the music items except the first one */

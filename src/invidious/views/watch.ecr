@@ -34,11 +34,11 @@
 we're going to need to do it here in order to allow for translations.
  -->
 <style>
-#descexpansionbutton ~ label > a::after {
+#descexpansionbutton ~ label::after {
     content: "<%= I18n.translate(locale, "Show more") %>"
 }
 
-#descexpansionbutton:checked ~ label > a::after {
+#descexpansionbutton:checked ~ label::after {
     content: "<%= I18n.translate(locale, "Show less") %>"
 }
 </style>
@@ -101,23 +101,23 @@ we're going to need to do it here in order to allow for translations.
     </h1>
 
     <% if !video.is_listed %>
-        <h3>
+        <p class="watch-status">
             <i class="icon ion-ios-unlock"></i> <%= I18n.translate(locale, "Unlisted") %>
-        </h3>
+        </p>
     <% end %>
 
     <% if video.reason %>
-        <h3>
+        <p class="watch-status">
             <%= video.reason %>
-        </h3>
+        </p>
     <% elsif video.premiere_timestamp.try &.> Time.utc %>
-        <h3>
+        <p class="watch-status">
             <%= video.premiere_timestamp.try { |t| I18n.translate(locale, "Premieres in `x`", recode_date((t - Time.utc).ago, locale)) } %>
-        </h3>
+        </p>
     <% elsif video.live_now %>
-        <h3>
+        <p class="watch-status">
             <%= video.premiere_timestamp.try { |t| I18n.translate(locale, "videoinfo_started_streaming_x_ago", recode_date((Time.utc - t).ago, locale)) } %>
-        </h3>
+        </p>
     <% end %>
 </div>
 
@@ -275,9 +275,7 @@ we're going to need to do it here in order to allow for translations.
                 <% else %>
                     <input id="descexpansionbutton" type="checkbox"/>
                     <div id="descriptionWrapper"><%= video.description_html %></div>
-                    <label for="descexpansionbutton">
-                        <a></a>
-                    </label>
+                    <label for="descexpansionbutton"></label>
                 <% end %>
             </div>
 
@@ -285,13 +283,13 @@ we're going to need to do it here in order to allow for translations.
 
             <% if !video.music.empty? %>
                 <input id="music-desc-expansion" type="checkbox"/>
-                <label for="music-desc-expansion">
-                    <h3 id="music-description-title">
+                <h2 id="music-description-title">
+                    <label for="music-desc-expansion">
                         <%= I18n.translate(locale, "Music in this video") %>
                         <span class="icon ion-ios-arrow-up"></span>
                         <span class="icon ion-ios-arrow-down"></span>
-                    </h3>
-                </label>
+                    </label>
+                </h2>
 
                 <div id="music-description-box">
                     <% video.music.each do |music| %>
@@ -313,6 +311,9 @@ we're going to need to do it here in order to allow for translations.
                 <% else %>
                     <% if video.comments? %>
                         <% if nojs %>
+                            <%- if comment_count -%>
+                            <h2><%= I18n.translate(locale, "View `x` comments", number_with_separator(comment_count)) %></h2>
+                            <%- end -%>
                             <%= comment_html %>
                         <% else %>
                             <noscript>

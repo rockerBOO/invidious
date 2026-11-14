@@ -1,6 +1,6 @@
 var video_data = JSON.parse(document.getElementById('video_data').textContent);
 
-var spinnerHTML = '<h3 style="text-align:center"><div class="loading"><i class="icon ion-ios-refresh"></i></div></h3>';
+var spinnerHTML = '<div class="loading-spinner"><div class="loading"><i class="icon ion-ios-refresh"></i></div></div>';
 var spinnerHTMLwithHR = spinnerHTML + '<hr>';
 
 String.prototype.supplant = function (o) {
@@ -87,10 +87,10 @@ function get_youtube_comments() {
         on200: function (response) {
             var commentInnerHtml = ' \
             <div> \
-                <h3> \
+                <h2> \
                     <a href="javascript:void(0)">[ − ]</a> \
                     {commentsText}  \
-                </h3> \
+                </h2> \
             </div> \
             <div>{contentHtml}</div> \
             <hr>'

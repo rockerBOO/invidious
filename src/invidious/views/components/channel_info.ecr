@@ -1,6 +1,6 @@
 <% if channel.banner %>
     <div class="h-box">
-        <img style="width:100%" src="/ggpht<%= URI.parse(channel.banner.not_nil!.gsub("=w1060-", "=w1280-")).request_target %>" alt="" />
+        <img class="channel-banner" src="/ggpht<%= URI.parse(channel.banner.not_nil!.gsub("=w1060-", "=w1280-")).request_target %>" alt="" />
     </div>
 
     <div class="h-box">
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div id="descriptionWrapper"><p><span style="white-space:pre-wrap"><%= channel.description_html %></span></p></div>
+    <div id="descriptionWrapper"><p><%= channel.description_html %></p></div>
 
     <ul class="channel-links">
         <li><a href="<%= youtube_url %>"><%= I18n.translate(locale, "View channel on YouTube") %></a></li>

@@ -13,6 +13,9 @@
 
     <div id="comments" class="comments post-comments">
         <% if nojs %>
+            <%- if comment_count -%>
+            <h2><%= I18n.translate(locale, "View `x` comments", number_with_separator(comment_count)) %></h2>
+            <%- end -%>
             <%= comment_html %>
         <% else %>
             <noscript>
