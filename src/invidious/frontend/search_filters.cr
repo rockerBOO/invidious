@@ -40,9 +40,9 @@ module Invidious::Frontend::SearchFilters
   macro filter_wrapper(name)
     str << "\t\t\t\t<div class=\"filter-column\"><fieldset>\n"
 
-    str << "\t\t\t\t\t<legend><div class=\"filter-name underlined\">"
+    str << "\t\t\t\t\t<legend><span class=\"filter-name underlined\">"
     str << I18n.translate(locale, "search_filters_{{ name }}_label")
-    str << "</div></legend>\n"
+    str << "</span></legend>\n"
 
     str << "\t\t\t\t\t<div class=\"filter-options\">\n"
     make_{{ name }}_filter_options(str, filters.{{ name }}, locale)

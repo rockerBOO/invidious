@@ -8,13 +8,15 @@
 <link rel="stylesheet" href="/css/search.css?v=<%= ASSET_COMMIT %>">
 <% end %>
 
+<h1 class="page-title page-title-small"><%= I18n.translate(locale, "Search") %> <q><%= search_query %></q></h1>
+
 <!-- Search redirection and filtering UI -->
 <%= Invidious::Frontend::SearchFilters.generate(query.filters, query.text, query.page, locale) %>
 <hr/>
 
 
 <%- if items.empty? -%>
-<div class="h-box no-results-error">
+<div class="no-results-error">
     <div>
         <%= I18n.translate(locale, "search_message_no_results") %><br/><br/>
         <%= I18n.translate(locale, "search_message_change_filters_or_query") %><br/><br/>
