@@ -1447,6 +1447,65 @@ fieldset > legend:first-child,
 
 
 /*
+ * Preferences: a label column and a control column per row, stacked on
+ * narrow screens (at the same width as Pure's aligned forms). The column
+ * and gap line up with the Pure rows below (19em label, 1em margin and the
+ * space between the inline-block label and control).
+ */
+
+.pref-row {
+  display: grid;
+  grid-template-columns: 19em minmax(0, 1fr);
+  column-gap: 1.25em;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+/* .pref-label names a group of controls (role="group"), so it isn't a label */
+.pref-row > label,
+.pref-row > .pref-label {
+  margin: 0;
+  text-align: right;
+}
+
+.pref-row > input,
+.pref-row > select {
+  justify-self: start;
+  max-width: 100%;
+}
+
+/* A checkbox takes a text line's height, as it did inline */
+.pref-row > input[type="checkbox"] {
+  margin: 3px 0;
+}
+
+.pref-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--secondary-gap);
+}
+
+.pref-controls > select {
+  min-width: 0;
+  max-width: 12em;
+}
+
+@media (max-width: 30em) {
+  .pref-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.3em;
+  }
+
+  .pref-row > label,
+  .pref-row > .pref-label {
+    max-width: 19em;
+    text-align: left;
+  }
+}
+
+
+/*
  * Miscellanous
  */
 
