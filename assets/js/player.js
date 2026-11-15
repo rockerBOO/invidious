@@ -855,3 +855,143 @@ addEventListener('DOMContentLoaded', function () {
         changeInstanceLink.href = addCurrentTimeToURL(changeInstanceLink.href);
     });
 });
+
+/* ---------------------------------------------------------------------------
+ * Recover from a wedged media pipeline instead of requiring a page refresh.
+ *
+ * When a single segment request fails, video.js/VHS can leave a track loader
+ * stuck: currentTime stops advancing, buffered data stops growing, play/pause
+ * does nothing, and no 'error' event fires (so the handlers above never run).
+ * Until now the only cure was reloading the page.
+ *
+ * This guard only acts when it is confident the player is wedged rather than
+ * merely waiting on the network, and it backs off, so a sick upstream is not
+ * hammered:
+ *   - tab visible, playing, not seeking, not ended
+ *   - currentTime unchanged for STALL_MS
+ *   - no media request currently in flight (a slow download is left alone)
+ *   - readyState >= HAVE_CURRENT_DATA (data is present => not "still loading")
+ *   - at most MAX_RECOVERIES reloads, at least MIN_GAP_MS apart
+ * ------------------------------------------------------------------------- */
+(function () {
+    if (window.__stallGuard) { return; }
+    window.__stallGuard = true;
+    if (typeof player === 'undefined' || !player) { return; }
+
+    var STALL_MS = 12000;        // frozen this long before we believe it
+    var MIN_GAP_MS = 30000;      // minimum spacing between recoveries
+    var MAX_RECOVERIES = 2;      // then stop and tell the user to refresh
+    var RESET_AFTER_MS = 300000; // healthy playback for 5 min resets the budget
+
+    var inflight = 0;
+    var lastTime = -1;
+    var lastMove = Date.now();
+    var lastRecovery = 0;
+    var recoveries = 0;
+    var recovering = false;
+
+    // Track in-flight media requests, so a genuinely slow download is never
+    // mistaken for a wedged loader.
+    try {
+        var origOpen = XMLHttpRequest.prototype.open;
+        var origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function (method, url) {
+            try { this.__stallMedia = /videoplayback|latest_version|manifest/.test(String(url)); } catch (e) { }
+            return origOpen.apply(this, arguments);
+        };
+        XMLHttpRequest.prototype.send = function () {
+            var self = this;
+            if (self.__stallMedia) {
+                inflight++;
+                try {
+                    self.addEventListener('loadend', function () { if (inflight > 0) { inflight--; } });
+                } catch (e) { }
+            }
+            return origSend.apply(this, arguments);
+        };
+    } catch (e) { }
+
+    function recover() {
+        try {
+            var pos = player.currentTime();
+            var rate = player.playbackRate();
+            var wasPlaying = !player.paused();
+
+            recovering = true;
+            lastRecovery = Date.now();
+            recoveries++;
+            (window.__stallRecoveries = window.__stallRecoveries || []).push({ at: Date.now(), pos: pos });
+            console.warn('[player] playback stalled at ' + pos.toFixed(1) + 's; reloading source ('
+                + recoveries + '/' + MAX_RECOVERIES + ')');
+
+            // One tiny trace per recovery (max MAX_RECOVERIES per page load),
+            // so this is observable without spamming the instance.
+            try {
+                fetch('/__stallrecover?n=' + recoveries + '&t=' + Math.round(pos),
+                    { mode: 'no-cors', redirect: 'manual', keepalive: true }).catch(function () { });
+            } catch (e) { }
+
+            // Never stay in the "recovering" state if loadedmetadata never comes.
+            window.setTimeout(function () {
+                if (recovering) { recovering = false; lastMove = Date.now(); }
+            }, 20000);
+
+            player.one('loadedmetadata', function () {
+                try {
+                    if (pos > 0) { player.currentTime(pos); }
+                    player.playbackRate(rate);
+                    if (wasPlaying) {
+                        var p = player.play();
+                        if (p && p.catch) { p.catch(function () { }); }
+                    }
+                } catch (e) { }
+                window.setTimeout(function () {
+                    recovering = false;
+                    lastTime = player.currentTime();
+                    lastMove = Date.now();
+                }, 2000);
+            });
+            player.load();
+        } catch (e) {
+            recovering = false;
+        }
+    }
+
+    // Escape hatch for testing: call window.__stallForceRecover() in the console.
+    window.__stallForceRecover = recover;
+
+    setInterval(function () {
+        try {
+            if (!player || (player.isDisposed && player.isDisposed())) { return; }
+            if (recovering) { return; }
+            if (player.paused() || player.seeking() || player.ended()) { lastMove = Date.now(); return; }
+            if (document.visibilityState !== 'visible') { lastMove = Date.now(); return; }
+
+            var t = player.currentTime();
+            if (t !== lastTime) {
+                lastTime = t;
+                lastMove = Date.now();
+                if (recoveries && Date.now() - lastRecovery > RESET_AFTER_MS) { recoveries = 0; }
+                return;
+            }
+
+            if (Date.now() - lastMove < STALL_MS) { return; }
+            if (inflight > 0) { lastMove = Date.now(); return; }
+            // A wedged VHS loader often sits at readyState 0 even though the
+            // duration is already known (it has given up on every playlist).
+            // Only a fresh page, which has no duration yet, is genuinely
+            // "still loading" and should be left alone.
+            if (player.readyState() < 2 && !(player.duration() > 0)) { lastMove = Date.now(); return; }
+            if (Date.now() - lastRecovery < MIN_GAP_MS) { return; }
+
+            if (recoveries >= MAX_RECOVERIES) {
+                if (!window.__stallGaveUp) {
+                    window.__stallGaveUp = true;
+                    console.error('[player] playback stalled repeatedly; not reloading again. Refresh the page.');
+                }
+                return;
+            }
+            recover();
+        } catch (e) { }
+    }, 1000);
+})();
