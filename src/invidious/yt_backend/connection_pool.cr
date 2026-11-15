@@ -58,6 +58,14 @@ struct CompanionWrapper
   def initialize(companion : Config::CompanionConfig)
     @companion = companion
     @client = make_client(companion.private_url, use_http_proxy: false)
+
+    # Companion streams media straight from YouTube, which can legitimately go
+    # quiet for far longer than the 10s default `make_client` uses for API
+    # calls (throttling, seeks, slow origins). Aborting such a stream mid-body
+    # leaves the caller with a truncated response and no way to recover, so
+    # give media transfers a much larger idle budget.
+    @client.read_timeout = 60.seconds
+    @client.write_timeout = 60.seconds
   end
 
   def close
@@ -83,19 +91,31 @@ struct CompanionConnectionPool
     end
   end
 
-  def client(&)
+  # Yields a pooled companion client.
+  #
+  # Set `retry_on_error: false` when the response is streamed to the client
+  # (i.e. the proxy route). Once headers or body bytes have been written, a
+  # retry cannot succeed and re-running the block would corrupt an already
+  # committed response.
+  def client(retry_on_error = true, &)
     wrapper = pool.checkout
 
     begin
       response = yield wrapper
-    rescue
-      wrapper.close
+    rescue ex
+      # The pooled connection may have died mid-transfer, so never hand this
+      # wrapper out again. Release a fresh one instead.
+      begin
+        wrapper.close
+      rescue
+      end
+      wrapper = CompanionWrapper.new(companion: CONFIG.invidious_companion.sample)
 
-      companion = CONFIG.invidious_companion.sample
-      make_client(companion.private_url, use_http_proxy: false)
-      wrapper = CompanionWrapper.new(companion: companion)
-
-      response = yield wrapper
+      if retry_on_error
+        response = yield wrapper
+      else
+        raise ex
+      end
     ensure
       pool.release(wrapper)
     end
