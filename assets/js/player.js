@@ -995,3 +995,144 @@ addEventListener('DOMContentLoaded', function () {
         } catch (e) { }
     }, 1000);
 })();
+
+/* ---------------------------------------------------------------------------
+ * TEMP TRACING - debug/player-stall-trace only, not part of the fix.
+ *
+ * Event-driven and low volume: reports media requests that fail or take >10s,
+ * player error/abort/empty events, and a stalled player (first at 3s, then at
+ * most every 15s). Carries the recent video.js warnings so VHS's own
+ * "playlist ... switching" messages are captured server-side.
+ * Remove this whole block when the investigation is done.
+ * ------------------------------------------------------------------------- */
+(function () {
+    if (window.__stallTrace) { return; }
+    window.__stallTrace = true;
+    if (typeof player === 'undefined' || !player) { return; }
+
+    var logs = [], xhr = [], evs = [], last = -1, stallAt = 0, lastStallSend = 0;
+
+    function snap() {
+        var o = {};
+        try {
+            var tech = player.tech(true) || {};
+            var vhs = tech.vhs;
+            var media = (vhs && vhs.playlists && vhs.playlists.media) ? vhs.playlists.media() : null;
+            var r = [];
+            try {
+                var b = player.buffered();
+                for (var i = 0; i < b.length; i++) { r.push([+b.start(i).toFixed(1), +b.end(i).toFixed(1)]); }
+            } catch (e) { }
+            var sb = [];
+            try {
+                var ms = vhs && vhs.mediaSource_;
+                var list = (ms && ms.sourceBuffers) || [];
+                for (var j = 0; j < list.length; j++) {
+                    var s = list[j], br = [];
+                    try {
+                        for (var k = 0; k < s.buffered.length; k++) { br.push([+s.buffered.start(k).toFixed(1), +s.buffered.end(k).toFixed(1)]); }
+                    } catch (e) { }
+                    sb.push({ up: s.updating, b: br, tso: +s.timestampOffset.toFixed(1) });
+                }
+            } catch (e) { }
+            var err = null;
+            try { var ve = player.error(); if (ve) { err = { c: ve.code, m: String(ve.message || '').slice(0, 60) }; } } catch (e) { }
+            o.t = +player.currentTime().toFixed(2);
+            o.dur = player.duration();
+            o.rs = player.readyState();
+            o.ns = player.networkState();
+            o.p = player.paused() ? 1 : 0;
+            o.sk = player.seeking() ? 1 : 0;
+            o.buf = r;
+            o.sb = sb;
+            o.err = err;
+            o.res = (media && media.attributes && media.attributes.RESOLUTION) ? media.attributes.RESOLUTION.height : null;
+            o.vis = document.visibilityState;
+        } catch (e) { o.e = String(e).slice(0, 40); }
+        return o;
+    }
+
+    function send(tag) {
+        try {
+            var now = Date.now();
+            var payload = { tag: tag, logs: logs.slice(-4), xhr: xhr.slice(-6), ev: evs.slice(-3), st: snap() };
+            var d = encodeURIComponent(JSON.stringify(payload));
+            if (d.length > 2400) { d = d.slice(0, 2400); }
+            fetch('/__stalldiag?d=' + d + '&_=' + now,
+                { mode: 'no-cors', redirect: 'manual', keepalive: true }).catch(function () { });
+        } catch (e) { }
+    }
+
+    // video.js warnings are where VHS reports playlist failures.
+    try {
+        var lw = videojs.log.warn, le = videojs.log.error;
+        videojs.log.warn = function () {
+            try {
+                var m = Array.prototype.slice.call(arguments).join(' ');
+                logs.push('W:' + String(m).slice(0, 90));
+                if (logs.length > 8) { logs.shift(); }
+            } catch (e) { }
+            return lw && lw.apply(videojs.log, arguments);
+        };
+        videojs.log.error = function () {
+            try {
+                var m = Array.prototype.slice.call(arguments).join(' ');
+                logs.push('E:' + String(m).slice(0, 90));
+                if (logs.length > 8) { logs.shift(); }
+            } catch (e) { }
+            return le && le.apply(videojs.log, arguments);
+        };
+    } catch (e) { }
+
+    // Media XHR trace: report failures and very slow responses only.
+    try {
+        var origOpen = XMLHttpRequest.prototype.open, origSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function (method, url) {
+            try {
+                var s = String(url), i = s.match(/[&?]itag=(\d+)/);
+                this.__trace = { i: i ? i[1] : '', k: /videoplayback/.test(s) ? 'media' : (/manifest/.test(s) ? 'mpd' : 'other'), t0: Date.now() };
+            } catch (e) { }
+            return origOpen.apply(this, arguments);
+        };
+        XMLHttpRequest.prototype.send = function () {
+            var self = this;
+            try {
+                self.addEventListener('loadend', function () {
+                    try {
+                        var r = self.__trace || {};
+                        r.s = self.status;
+                        r.n = (self.response && self.response.byteLength) || 0;
+                        r.ms = Date.now() - r.t0;
+                        xhr.push(r);
+                        if (xhr.length > 10) { xhr.shift(); }
+                        var bad = (r.k === 'media' && (r.s < 200 || r.s >= 300));
+                        if (bad || r.ms > 10000) { send('xhr:' + r.k + ':itag' + r.i + ':' + r.s + ':' + r.ms + 'ms'); }
+                    } catch (e) { }
+                });
+            } catch (e) { }
+            return origSend.apply(this, arguments);
+        };
+    } catch (e) { }
+
+    ['error', 'emptied', 'abort'].forEach(function (name) {
+        try {
+            player.on(name, function () {
+                evs.push('ev:' + name);
+                if (evs.length > 6) { evs.shift(); }
+                send('ev:' + name);
+            });
+        } catch (e) { }
+    });
+
+    setInterval(function () {
+        try {
+            if (!player || (player.isDisposed && player.isDisposed())) { return; }
+            if (player.paused() || player.seeking() || player.ended()) { stallAt = 0; return; }
+            var t = player.currentTime(), now = Date.now();
+            if (t !== last) { last = t; stallAt = 0; return; }
+            if (!stallAt) { stallAt = now; }
+            var stuck = (now - stallAt) / 1000;
+            if (stuck >= 3 && now - lastStallSend > 15000) { lastStallSend = now; send('STALL-' + Math.round(stuck) + 's'); }
+        } catch (e) { }
+    }, 1000);
+})();
