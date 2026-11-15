@@ -80,7 +80,13 @@ struct CompanionConnectionPool
     options = DB::Pool::Options.new(
       initial_pool_size: 0,
       max_pool_size: capacity,
-      max_idle_pool_size: capacity,
+      # Companion (Deno) drops idle keep-alive connections on its own schedule,
+      # which `HTTP::Client` cannot detect. Reusing such a socket means writing a
+      # request into a half-closed connection: the reply never arrives and the
+      # proxy sits there until its read timeout, so the browser gets headers and
+      # then nothing. Keeping no idle clients means every checkout is a fresh
+      # connection; on loopback that costs nothing, and it removes the failure.
+      max_idle_pool_size: 0,
       checkout_timeout: timeout
     )
 
